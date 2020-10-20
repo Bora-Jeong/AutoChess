@@ -4,18 +4,16 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
+    private MonoPanel[] _panels;
     private void Awake()
     {
-        HideAllPanels();
+        _panels = GetComponentsInChildren<MonoPanel>(true);
+        for(int i = 0; i < _panels.Length; i++)
+        {
+            _panels[i].Init();
+            _panels[i].Hide();
+        }
         LoginPanel.instance.Show();
-    }
-
-    public void HideAllPanels()
-    {
-        LobbyPanel.instance.Hide();
-        GamePanel.instance.Hide();
-        ShopPanel.instance.Hide();
-        LoginPanel.instance.Hide();
     }
 
     public void Update()

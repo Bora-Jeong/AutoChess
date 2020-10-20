@@ -26,7 +26,8 @@ public class GamePanel : PanelBase<GamePanel>
     [SerializeField]
     private Text _hpText;
 
-    private void Awake()
+
+    public override void Init()
     {
         GameManager.instance.OnRoundChanged += Instance_OnRoundChanged;
         GameManager.instance.OnGameStateChanged += Instance_OnGameStateChanged;
@@ -35,6 +36,10 @@ public class GamePanel : PanelBase<GamePanel>
         Player.instance.OnGoldChanged += Instance_OnGoldChanged;
         Player.instance.OnHPChanged += Instance_OnHPChanged;
         FieldManager.instance.OnFieldChanged += Instance_OnFieldChanged;
+    }
+    private void Start()
+    {
+        _nicknameText.text = Player.instance.nickname;
     }
 
     private void Instance_OnFieldChanged(object sender, System.EventArgs e)
@@ -73,4 +78,5 @@ public class GamePanel : PanelBase<GamePanel>
         _levelText.text = Player.instance.level.ToString();
         _chessCountText.text = $"{FieldManager.instance.GetCountOfMyChessOnField()}/{Player.instance.level}";
     }
+
 }

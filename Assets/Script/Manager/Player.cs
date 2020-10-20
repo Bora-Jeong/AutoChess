@@ -49,6 +49,8 @@ public class Player : Singleton<Player>
         }
     }
 
+    public string nickname { get; set; }
+
     public event EventHandler OnLevelChanged;
     public event EventHandler OnExpChanged;
     public event EventHandler OnGoldChanged;
