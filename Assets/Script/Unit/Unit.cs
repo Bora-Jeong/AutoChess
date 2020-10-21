@@ -33,19 +33,28 @@ public class Unit : MonoBehaviour
     private string _deadAnimName = "Die";
 
     private Animator _animator;
-    private float _hp;
-    public float mp;
     private IState[] _IStates;  // FSM 인터페이스 저장
-    public int unitID => _unitID;
-    public bool isDead => state == State.Dead;
-    public float findTargetRange { get; private set; }   // 범위 안에 있는 적 탐색
+
+    public string name;
+    public float fullHp;
+    public float hp;
+    public float mp;
+    public float findTargetRange;  // 범위 안에 있는 적 탐색
     public float attackTargetRange;  // 범위 안에 있는 적 공격
-    public float attackTerm = 1f; // 공격 텀
-    public float attackPower = 10f; // 공격력
+    public float attackTermTime = 1f; // 공격 텀
+    public float attackDamage = 1f; // 공격 데미지
+    public float skillDamage = 20f; // 스킬 데미지
     public float moveSpeed = 3f;
     public bool isPlayerUnit;
+    public int gold;
+    public Class clas;
+    public Species species;
+
+    public bool isInShop = false;
 
     public Unit target; // 공격 대상
+    public int unitID => _unitID;
+    public bool isDead => state == State.Dead;
 
     private State _state;
     public State state
@@ -67,18 +76,19 @@ public class Unit : MonoBehaviour
         _IStates[(int)State.Dead] = new DeadState(this);
 
         _animator = GetComponent<Animator>();
+
     }
 
     private void Start()
     {
-        _hp = 100f;
+        hp = fullHp;
         mp = 0f;
         state = State.Idle;
     }
 
     private void Update()
     {
-        if (!GameManager.instance.isPlaying || isDead) return;
+        if (!GameManager.instance.isPlaying || isDead || isInShop) return;
 
         _IStates[(int)_state].Stay();
 
@@ -88,10 +98,10 @@ public class Unit : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        _hp = Mathf.Clamp(_hp - 100, 0, 100);
+        hp = Mathf.Clamp(hp - damage, 0, fullHp);
         mp = Mathf.Clamp(mp + damage, 0, 100);
 
-        if (_hp <= 0)
+        if (hp <= 0)
             state = State.Dead;
     }
 

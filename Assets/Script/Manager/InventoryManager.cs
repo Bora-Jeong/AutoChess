@@ -11,8 +11,7 @@ public class InventoryManager : Singleton<InventoryManager>
     {
         for(int i = 0; i < _cells.Length; i++)
         {
-            // 위에 있는 캐릭터 삭제
-            _cells[i].isOccupied = false;
+            _cells[i].Clear();
         }
     }
 
@@ -24,5 +23,17 @@ public class InventoryManager : Singleton<InventoryManager>
                 return false;
         }
         return true;
+    }
+
+    public void AddUnit(int unitID)
+    {
+        for(int i = 0; i < _cells.Length; i++)
+        {
+            if (!_cells[i].isOccupied)
+            {
+                _cells[i].SpawnUnit(unitID);
+                break;
+            }
+        }
     }
 }

@@ -76,7 +76,7 @@ public class GameManager : Singleton<GameManager>
         round = 1;
         Player.instance.level = 1;
         Player.instance.exp = 0;
-        Player.instance.gold = 1;
+        Player.instance.gold = 100; // 개발용
         LobbyPanel.instance.Hide();
         GamePanel.instance.Show();
         StartCoroutine(GameScheduler());
