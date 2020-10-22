@@ -16,21 +16,38 @@ public class Cell : MonoBehaviour
 
     public Type type => _type;
     public bool isOccupied => _unit != null;
-    private Unit _unit;
 
-    public void Clear ()
+    public Unit _unit; // debulg용 public
+
+    public void SetUnit(Unit unit)
     {
-        if(_unit != null)
-            ObjectPoolManager.instance.ReleaseUnit(_unit);
+        _unit = unit;
+        _unit.onCell.DeSetUnit(); // 이전에 있던 Cell에 알림
+        _unit.onCell = this;
+    }
+
+    public void DeSetUnit()
+    {
+        _unit.onCell = null;
         _unit = null;
     }
 
     public void SpawnUnit(int unitID)
     {
         _unit = ObjectPoolManager.instance.GetUnit(unitID);
-        _unit.transform.SetParent(transform);
-        _unit.transform.localPosition = Vector3.zero;
+        _unit.transform.position = transform.position;
         _unit.transform.localEulerAngles = Vector3.zero;
+        _unit.isPlayerUnit = true;
+        _unit.onCell = this;
     }
 
+    public void DespawnUnit()
+    {
+        if (_unit != null)
+        {
+            ObjectPoolManager.instance.ReleaseUnit(_unit);
+            _unit.onCell = null;
+        }
+        _unit = null;
+    }
 }

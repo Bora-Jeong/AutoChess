@@ -9,6 +9,8 @@ public class InputManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     private Vector3 _prevInputPos;
     private bool _isDragged;
 
+    private Unit _grabedUnit;
+
     public void OnDrag(PointerEventData eventData)
     {
         if (Input.GetMouseButton(0))
@@ -22,14 +24,31 @@ public class InputManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         if (Input.GetMouseButtonDown(0))
         {
             _prevInputPos = Input.mousePosition;
+            
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Unit")))
             {
                 Unit unit = hit.collider.GetComponentInParent<Unit>();
-                if(unit != null && unit.isPlayerUnit)
+                if (unit != null && unit.isPlayerUnit)
                 {
-                    // 이동
+                    if (_grabedUnit != null) _grabedUnit.Ouline(false);
+                    _grabedUnit = unit;
+                    _grabedUnit.Ouline(true);
+                    return;
                 }
+            }
+            if (_grabedUnit != null) // 선택한 유닛이 있다면 이동할 타일 검색
+            {
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Cell")))
+                {
+                    Cell cell = hit.collider.GetComponent<Cell>();
+                    if (cell != null && cell.type != Cell.Type.EnemyField && !cell.isOccupied) // 클릭한 유닛 이동
+                    {
+                        FieldManager.instance.MoveUnitToCell(_grabedUnit, cell);
+                    }
+                }
+                if (_grabedUnit != null) _grabedUnit.Ouline(false);
+                _grabedUnit = null;
             }
         }
     }
@@ -38,7 +57,6 @@ public class InputManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     {
         if (Input.GetMouseButtonUp(0))
         {
-
             _isDragged = false;
         }
     }

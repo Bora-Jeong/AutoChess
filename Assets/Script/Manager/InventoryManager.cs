@@ -11,7 +11,7 @@ public class InventoryManager : Singleton<InventoryManager>
     {
         for(int i = 0; i < _cells.Length; i++)
         {
-            _cells[i].Clear();
+            _cells[i].DespawnUnit();
         }
     }
 

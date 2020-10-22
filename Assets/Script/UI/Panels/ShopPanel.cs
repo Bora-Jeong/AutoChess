@@ -53,7 +53,6 @@ public class ShopPanel : PanelBase<ShopPanel>
     public void BuyUnit(Unit unit)
     {
         if (Player.instance.gold < unit.gold || InventoryManager.instance.IsFull()) return;
-        Debug.Log($"{unit.name} 구매");
         InventoryManager.instance.AddUnit(unit.unitID);
         Player.instance.gold -= unit.gold;
     }

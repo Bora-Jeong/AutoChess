@@ -44,7 +44,7 @@ public class GamePanel : PanelBase<GamePanel>
 
     private void Instance_OnFieldChanged(object sender, System.EventArgs e)
     {
-        _chessCountText.text = $"{FieldManager.instance.GetCountOfMyChessOnField()}/{Player.instance.level}";
+        _chessCountText.text = $"{FieldManager.instance.GetCountOfChessOnMyField()}/{Player.instance.level}";
     }
 
     private void Instance_OnGameStateChanged(object sender, System.EventArgs e)
@@ -76,7 +76,7 @@ public class GamePanel : PanelBase<GamePanel>
     private void Instance_OnLevelChanged(object sender, System.EventArgs e)
     {
         _levelText.text = Player.instance.level.ToString();
-        _chessCountText.text = $"{FieldManager.instance.GetCountOfMyChessOnField()}/{Player.instance.level}";
+        _chessCountText.text = $"{FieldManager.instance.GetCountOfChessOnMyField()}/{Player.instance.level}";
     }
 
 }

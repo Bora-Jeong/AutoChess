@@ -27,7 +27,7 @@ public static class Constants
     public static readonly int playerMaxLevel = 10; // 플레이어 최대 레벨
     public static readonly int unitMaxGold = 5; // 유닛 최대 골드
     public static readonly int goldToShuffleShop = 2; // 상점 셔플을 위해 필요한 골드
-
+    public static readonly float unitScaleIncreaseAmount = 0.3f;  // 1성 1 , 2성 1.3, 3성 1.6
 
     public static string ToName(this Class cls)
     {
