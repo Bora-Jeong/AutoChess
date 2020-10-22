@@ -21,10 +21,10 @@ public class ProductItem : MonoBehaviour
             ObjectPoolManager.instance.ReleaseUnit(_unit);
 
         _unit = unit;
-        _nameText.text = _unit.name;
-        _classText.text = _unit.clas.ToName();
-        _speciesText.text = _unit.species.ToName();
-        _goldText.text = $"Gold {_unit.gold}";
+        _nameText.text = _unit.Data.Name;
+        _classText.text = _unit.Data.CLAS.ToName();
+        _speciesText.text = _unit.Data.SPECIES.ToName();
+        _goldText.text = $"Gold {_unit.Data.Gold}";
     }
 
     public void OnClick()

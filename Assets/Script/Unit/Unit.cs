@@ -31,6 +31,8 @@ public class Unit : MonoBehaviour
     private string _skillAnimName = "Skill01";
     [SerializeField]
     private string _deadAnimName = "Die";
+    [HideInInspector]
+    public float findTargetRange;  // 범위 안에 있는 적 탐색
 
     private readonly float firingAngle = 45.0f;
     private readonly float gravity = 12f;
@@ -39,29 +41,20 @@ public class Unit : MonoBehaviour
     private Outline _outline;
     private IState[] _IStates;  // FSM 인터페이스 저장
 
-    public string name;
-    public float fullHp;
-    public float hp;
-    public float mp;
-    public float findTargetRange;  // 범위 안에 있는 적 탐색
-    public float attackTargetRange;  // 범위 안에 있는 적 공격
-    public float attackTermTime = 1f; // 공격 텀
-    public float attackDamage = 1f; // 공격 데미지
-    public float skillDamage = 20f; // 스킬 데미지
-    public float moveSpeed = 3f;
-    public bool isPlayerUnit;
-    public int gold;
-    public float defaultScale = 1f;
-    public Class clas;
-    public Species species;
+    public float curHp;
+    public float curMp;
+    public int curGold;
     public Sprite skillIcon;
-
+    public float curSkillCoolTime;
     public Cell onCell; // 현재 있는 셀 
-    public bool isInShop = false;
+    public bool isInShop = false; // 필요 없을듯?
+    public bool isPlayerUnit;
 
     public Unit target; // 공격 대상
     public int unitID => _unitID;
     public bool isDead => state == State.Dead;
+
+    public UnitTableData Data { get; private set; }
 
     private State _state;
     public State state
@@ -82,8 +75,9 @@ public class Unit : MonoBehaviour
         set
         {
             _star = value;
-            float increase = 1 + Constants.unitScaleIncreaseAmount * ( _star-1);
-            transform.localScale = Vector3.one * defaultScale * increase;
+            float salePlus = 1 + Constants.unitScaleIncreaseAmount * ( _star - 1);
+            transform.localScale = Vector3.one * Data.Scale * salePlus; // 크기 증가
+            curGold = Data.Gold * _star; // 골드 증가
             // 공격력 강해짐 체력 증가 등
         }
     }
@@ -97,15 +91,18 @@ public class Unit : MonoBehaviour
         _IStates[(int)State.Dead] = new DeadState(this);
 
         _animator = GetComponent<Animator>();
-        skillIcon = Resources.Load<Sprite>($"SkillIcon/skillIcon_{_unitID}");
+        skillIcon = Resources.Load<Sprite>($"SkillIcon/{_unitID}");
+
+        Data = TableData.instance.GetUnitTableData(_unitID);
     }
 
     private void OnEnable()
     {
-        hp = fullHp;
-        mp = 0f;
+        curHp = Data.Hp;
+        curMp = 0f;
         state = State.Idle;
         star = 1;
+        curSkillCoolTime = 0;
     }
 
     private void Update()
@@ -116,14 +113,15 @@ public class Unit : MonoBehaviour
 
         findTargetRange += Time.deltaTime;
         findTargetRange = Mathf.Clamp(findTargetRange, 10f, 500f);
+        curSkillCoolTime = Mathf.Clamp(curSkillCoolTime - Time.deltaTime, 0, Data.Skillcooltime);
     }
 
     public void TakeDamage(float damage)
     {
-        hp = Mathf.Clamp(hp - damage, 0, fullHp);
-        mp = Mathf.Clamp(mp + damage, 0, 100);
+        curHp = Mathf.Clamp(curHp - damage, 0, Data.Hp);
+        curMp = Mathf.Clamp(curMp + damage, 0, 100);
 
-        if (hp <= 0)
+        if (curHp <= 0)
             state = State.Dead;
     }
 

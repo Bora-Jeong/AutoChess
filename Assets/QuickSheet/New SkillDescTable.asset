@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c206fbab7b99364429f720b2e0d7cb45, type: 3}
+  m_Name: New SkillDescTable
+  m_EditorClassIdentifier: 
+  SheetName: DataTable
+  WorksheetName: SkillDescTable
+  dataArray:
+  - unitid: 100
+    desc: "\uC801\uC744 \uD5A5\uD574 \uB3CC\uC9C4 \uD6C4 \uD30C\uAD34\uD569\uB2C8\uB2E4."
+  - unitid: 101
+    desc: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - unitid: 102
+    desc: "\uBB3C\uB9AC \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - unitid: 103
+    desc: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - unitid: 104
+    desc: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - unitid: 105
+    desc: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - unitid: 106
+    desc: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - unitid: 107
+    desc: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - unitid: 108
+    desc: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - unitid: 200
+    desc: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - unitid: 201
+    desc: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - unitid: 202
+    desc: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - unitid: 203
+    desc: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - unitid: 300
+    desc: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - unitid: 301
+    desc: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - unitid: 400
+    desc: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - unitid: 401
+    desc: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - unitid: 500
+    desc: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."

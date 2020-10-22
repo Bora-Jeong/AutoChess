@@ -23,9 +23,9 @@ public class WalkState : IState
         }
 
         _owner.transform.LookAt(target.transform);
-        _owner.transform.position = Vector3.MoveTowards(_owner.transform.position, target.transform.position, Time.deltaTime * _owner.moveSpeed);
+        _owner.transform.position = Vector3.MoveTowards(_owner.transform.position, target.transform.position, Time.deltaTime * _owner.Data.Movespeed);
 
-        if (Vector3.Distance(_owner.transform.position, target.transform.position) <= _owner.attackTargetRange) // 공격 사거리 안에 들어오면 공격 시작
+        if (Vector3.Distance(_owner.transform.position, target.transform.position) <= _owner.Data.Attackrange) // 공격 사거리 안에 들어오면 공격 시작
             _owner.state = Unit.State.Attack;
     }
 

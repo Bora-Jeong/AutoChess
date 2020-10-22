@@ -71,7 +71,6 @@ public class GameManager : Singleton<GameManager>
 
     public void StartGame()
     {
-        FieldManager.instance.Clear();
         InventoryManager.instance.Clear();
         round = 1;
         Player.instance.level = 1;

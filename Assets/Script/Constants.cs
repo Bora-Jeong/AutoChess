@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public enum Class
+public enum Clas
 {
     Devil,
     Ork,
@@ -29,19 +29,19 @@ public static class Constants
     public static readonly int goldToShuffleShop = 2; // 상점 셔플을 위해 필요한 골드
     public static readonly float unitScaleIncreaseAmount = 0.3f;  // 1성 1 , 2성 1.3, 3성 1.6
 
-    public static string ToName(this Class cls)
+    public static string ToName(this Clas cls)
     {
         switch (cls)
         {
-            case Class.Devil:
+            case Clas.Devil:
                 return "악마";
-            case Class.Ork:
+            case Clas.Ork:
                 return "오크";
-            case Class.Dragon:
+            case Clas.Dragon:
                 return "용";
-            case Class.Human:
+            case Clas.Human:
                 return "인간";
-            case Class.Elf:
+            case Clas.Elf:
                 return "엘프";
             default:
                 return string.Empty;

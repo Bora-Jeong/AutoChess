@@ -52,9 +52,9 @@ public class ShopPanel : PanelBase<ShopPanel>
 
     public void BuyUnit(Unit unit)
     {
-        if (Player.instance.gold < unit.gold || InventoryManager.instance.IsFull()) return;
-        InventoryManager.instance.AddUnit(unit.unitID);
-        Player.instance.gold -= unit.gold;
+        if (Player.instance.gold < unit.Data.Gold || InventoryManager.instance.IsFull()) return;
+        InventoryManager.instance.BuyUnit(unit.unitID);
+        Player.instance.gold -= unit.Data.Gold;
     }
 
 
@@ -136,11 +136,13 @@ public class ShopPanel : PanelBase<ShopPanel>
             _unitGoldPoolDic.Add(i, temp);
         }
 
-        Unit[] units = Resources.LoadAll<Unit>("Unit/");
         _unitIDDic = new Dictionary<int, List<int>>();
         for (int i = 0; i < Constants.unitMaxGold; i++)
             _unitIDDic.Add(i, new List<int>());
-        for (int i = 0; i < units.Length; i++)
-            _unitIDDic[units[i].gold-1].Add(units[i].unitID);
+
+        var unitDic = TableData.instance.unitTableDic;
+        foreach(var par in unitDic)
+            _unitIDDic[par.Value.Gold - 1].Add(par.Key);
+
     }
 }

@@ -34,6 +34,7 @@ public class InputManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
                     if (_grabedUnit != null) _grabedUnit.Ouline(false);
                     _grabedUnit = unit;
                     _grabedUnit.Ouline(true);
+                    GamePanel.instance.ShowUnitInfo(_grabedUnit);
                     return;
                 }
             }
@@ -49,6 +50,7 @@ public class InputManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
                 }
                 if (_grabedUnit != null) _grabedUnit.Ouline(false);
                 _grabedUnit = null;
+                GamePanel.instance.ShowUnitInfo(null);
             }
         }
     }

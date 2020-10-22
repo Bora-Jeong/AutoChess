@@ -21,7 +21,7 @@ public class UnitCanvas : MonoBehaviour
     {
         float x = Camera.main.transform.rotation.eulerAngles.x;
         transform.rotation = Quaternion.Euler(x, 0, 0);
-        _hp.fillAmount = _owner.hp / _owner.fullHp;
-        _mp.fillAmount = _owner.mp / 100;
+        _hp.fillAmount = _owner.curHp / _owner.Data.Hp;
+        _mp.fillAmount = _owner.curMp / 100;
     }
 }
