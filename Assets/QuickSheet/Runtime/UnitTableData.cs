@@ -45,6 +45,14 @@ public class UnitTableData
   public float Deffensepower { get {return deffensepower; } set { this.deffensepower = value;} }
   
   [SerializeField]
+  float magicresistpower;
+  public float Magicresistpower { get {return magicresistpower; } set { this.magicresistpower = value;} }
+  
+  [SerializeField]
+  DamageType damagetype;
+  public DamageType DAMAGETYPE { get {return damagetype; } set { this.damagetype = value;} }
+  
+  [SerializeField]
   float skillcooltime;
   public float Skillcooltime { get {return skillcooltime; } set { this.skillcooltime = value;} }
   

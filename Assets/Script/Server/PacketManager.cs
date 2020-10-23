@@ -111,7 +111,8 @@ public class PacketManager : HNET.CHNetConnector
             Player.instance.nickname = nickname;
             LoginPanel.instance.SaveCurrentInfo();
             LoginPanel.instance.Hide();
-            LobbyPanel.instance.Show();
+            LoadingPanel.instance.Show();
+            LoadingPanel.instance.LoadAllUnit();
         }
         else
         {

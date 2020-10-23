@@ -18,7 +18,7 @@ public class UIManager : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
             if (ShopPanel.instance.isActiveAndEnabled)
                 ShopPanel.instance.Hide();

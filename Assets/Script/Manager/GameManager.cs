@@ -11,9 +11,10 @@ public class GameManager : Singleton<GameManager>
 
     public enum GameState
     {
-        Prepare,
-        Wait,
-        Battle
+        Prepare, 
+        Wait, 
+        Battle,
+        Result 
     }
 
     public bool isPlaying { get; private set; }
@@ -29,18 +30,8 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    private int _round;
-    public int round
-    {
-        get => _round;
-        private set
-        {
-            _round = value;
-            OnRoundChanged?.Invoke(this, EventArgs.Empty);
-        }
-    }
+    public int round { get; private set; }
 
-    public event EventHandler OnRoundChanged;
     public event EventHandler OnGameStateChanged;
 
     private float _timer;
@@ -56,15 +47,23 @@ public class GameManager : Singleton<GameManager>
         {
             case GameState.Prepare:
                 _timer = Constants.prepareTimeSpan;
+                round++;
                 ShopPanel.instance.Show();
+                ShopPanel.instance.Shuffle();
                 break;
 
             case GameState.Wait:
                 _timer = Constants.waitTimeSpan;
+                // 몹 소환
                 break;
 
             case GameState.Battle:
                 _timer = Constants.battleTimeSpan;
+                break;
+
+            case GameState.Result:
+                _timer = Constants.resultTimeSpan;
+                // 패배시 플레이어 체력 감소, 연승 or 연패 기록
                 break;
         }
     }
@@ -72,10 +71,11 @@ public class GameManager : Singleton<GameManager>
     public void StartGame()
     {
         InventoryManager.instance.Clear();
-        round = 1;
+        FieldManager.instance.Clear();
         Player.instance.level = 1;
         Player.instance.exp = 0;
         Player.instance.gold = 100; // 개발용
+        round = 0;
         LobbyPanel.instance.Hide();
         GamePanel.instance.Show();
         StartCoroutine(GameScheduler());
@@ -86,7 +86,7 @@ public class GameManager : Singleton<GameManager>
         gameState = GameState.Prepare;  // 게임 시작
         _timer = Constants.prepareTimeSpan;
         isPlaying = true;
-
+        
         while (_timer > 0 && isPlaying)
         {
             _timer -= Time.deltaTime;

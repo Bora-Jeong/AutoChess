@@ -29,7 +29,7 @@ public class InputManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Unit")))
             {
                 Unit unit = hit.collider.GetComponentInParent<Unit>();
-                if (unit != null && unit.isPlayerUnit)
+                if (unit != null && !unit.isCreep)
                 {
                     if (_grabedUnit != null) _grabedUnit.Ouline(false);
                     _grabedUnit = unit;

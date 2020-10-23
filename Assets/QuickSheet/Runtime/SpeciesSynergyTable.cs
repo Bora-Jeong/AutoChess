@@ -10,7 +10,7 @@ using System.Collections.Generic;
 /// can be serialized onto an asset data file.
 /// 
 [System.Serializable]
-public class SkillDescTable : ScriptableObject 
+public class SpeciesSynergyTable : ScriptableObject 
 {
     [HideInInspector] [SerializeField] 
     public string SheetName = "";
@@ -19,7 +19,7 @@ public class SkillDescTable : ScriptableObject
     public string WorksheetName = "";
     
     // Note: initialize in OnEnable() not here.
-    public SkillDescTableData[] dataArray;
+    public SpeciesSynergyTableData[] dataArray;
     
     void OnEnable()
     {
@@ -32,13 +32,13 @@ public class SkillDescTable : ScriptableObject
         //    because OnEnable is called whenever Unity builds.
         // 
         if (dataArray == null)
-            dataArray = new SkillDescTableData[0];
+            dataArray = new SpeciesSynergyTableData[0];
     }
     
     //
     // Write a proper query methods for retrieving data.
     //
-    //public SkillDescTableData FindByKey(string key)
+    //public SpeciesSynergyTableData FindByKey(string key)
     //{
     //    return Array.Find(dataArray, d => d.Key == key);
     //}

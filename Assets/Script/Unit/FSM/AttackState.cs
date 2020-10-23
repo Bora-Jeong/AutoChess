@@ -36,20 +36,20 @@ public class AttackState : MonoBehaviour, IState
 
             yield return new WaitForSeconds(0.3f);
 
-            _owner.target.TakeDamage(_owner.Data.Attackdamage);
-            _owner.curMp = Mathf.Clamp(_owner.curMp + _owner.Data.Attackdamage, 0, 100);
+            _owner.target.TakeDamage( _owner.Data.DAMAGETYPE, _owner.curAttackDamage);
+            _owner.curMp = Mathf.Clamp(_owner.curMp + _owner.curAttackDamage, 0, _owner.curFullMp);
 
             yield return new WaitForSeconds(_owner.Data.Attackterm - 0.3f);
 
-            if (_owner.curMp >= 100f && _owner.curSkillCoolTime == 0) // 마나가 꽉 차면 스킬 시전
+            if (_owner.curMp >= _owner.curFullMp && _owner.curSkillCoolTime <= 0) // 스킬 시전
             {
                 _animator.SetTrigger("Skill");
-                _owner.curMp -= 100;
+                _owner.curMp -= _owner.curFullMp;
                 _owner.curSkillCoolTime = _owner.Data.Skillcooltime;
 
                 yield return new WaitForSeconds(0.3f);
 
-                _owner.target.TakeDamage(_owner.Data.Skilldamage);
+                _owner.target.TakeDamage(_owner.Data.DAMAGETYPE, _owner.curSkillDamage);
             }
         }
     }

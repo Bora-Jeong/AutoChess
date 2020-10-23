@@ -93,8 +93,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4525298171969540}
   - component: {fileID: 137530668376263948}
-  - component: {fileID: 811904674449151112}
-  - component: {fileID: 7539119817217820205}
   m_Layer: 8
   m_Name: M07_03
   m_TagString: Untagged
@@ -197,32 +195,6 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.44729173, y: 0.021043912, z: 0.0026763082}
     m_Extent: {x: 0.88441527, y: 0.47883856, z: 0.90073615}
   m_DirtyAABB: 0
---- !u!64 &811904674449151112
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1025611337592610}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 59c6bad8aa5520c4eb270f275c18aac7, type: 3}
---- !u!114 &7539119817217820205
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1025611337592610}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a0eebc8f35843a4089d09b0ab55e5ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1028801975303588
 GameObject:
   m_ObjectHideFlags: 0
@@ -825,8 +797,9 @@ GameObject:
   - component: {fileID: 4463795480342126}
   - component: {fileID: 95524290313717262}
   - component: {fileID: -2616583299720430232}
+  - component: {fileID: 3937201923344576855}
   m_Layer: 8
-  m_Name: unit_112
+  m_Name: unit_203
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -890,28 +863,28 @@ MonoBehaviour:
   _attackAnimName: Attack01
   _skillAnimName: Skill01
   _deadAnimName: Die
-  name: "\uC288\uB809"
-  fullHp: 0
+  findTargetRange: 0
   curHp: 0
   curMp: 0
-  findTargetRange: 0
-  attackTargetRange: 3
-  attackTermTime: 1
-  attackDamage: 1
-  skillDamage: 20
-  moveSpeed: 3
-  isPlayerUnit: 0
-  gold: 3
-  defaultScale: 1
-  clas: 1
-  species: 4
-  skillIcon: {fileID: 0}
-  skillCoolTime: 5
   curSkillCoolTime: 0
   onCell: {fileID: 0}
-  isInShop: 0
-  isMoving: 0
+  skillIcon: {fileID: 0}
+  isCreep: 0
   target: {fileID: 0}
+--- !u!136 &3937201923344576855
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1395821017673748}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.76
+  m_Height: 2.142601
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.5713005, z: 0}
 --- !u!1 &1438541266647394
 GameObject:
   m_ObjectHideFlags: 0

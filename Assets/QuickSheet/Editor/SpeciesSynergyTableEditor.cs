@@ -12,26 +12,26 @@ using UnityQuickSheet;
 ///
 /// !!! Machine generated code !!!
 ///
-[CustomEditor(typeof(SkillDescTable))]
-public class SkillDescTableEditor : BaseGoogleEditor<SkillDescTable>
+[CustomEditor(typeof(SpeciesSynergyTable))]
+public class SpeciesSynergyTableEditor : BaseGoogleEditor<SpeciesSynergyTable>
 {	    
     public override bool Load()
     {        
-        SkillDescTable targetData = target as SkillDescTable;
+        SpeciesSynergyTable targetData = target as SpeciesSynergyTable;
         
         var client = new DatabaseClient("", "");
         string error = string.Empty;
         var db = client.GetDatabase(targetData.SheetName, ref error);	
-        var table = db.GetTable<SkillDescTableData>(targetData.WorksheetName) ?? db.CreateTable<SkillDescTableData>(targetData.WorksheetName);
+        var table = db.GetTable<SpeciesSynergyTableData>(targetData.WorksheetName) ?? db.CreateTable<SpeciesSynergyTableData>(targetData.WorksheetName);
         
-        List<SkillDescTableData> myDataList = new List<SkillDescTableData>();
+        List<SpeciesSynergyTableData> myDataList = new List<SpeciesSynergyTableData>();
         
         var all = table.FindAll();
         foreach(var elem in all)
         {
-            SkillDescTableData data = new SkillDescTableData();
+            SpeciesSynergyTableData data = new SpeciesSynergyTableData();
             
-            data = Cloner.DeepCopy<SkillDescTableData>(elem.Element);
+            data = Cloner.DeepCopy<SpeciesSynergyTableData>(elem.Element);
             myDataList.Add(data);
         }
                 

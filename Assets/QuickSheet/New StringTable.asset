@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 136e8adf604439243a9a2c1558e269eb, type: 3}
+  m_Name: New StringTable
+  m_EditorClassIdentifier: 
+  SheetName: DataTable
+  WorksheetName: StringTable
+  dataArray:
+  - typeid: skillDesc_100
+    content: "\uC801\uC744 \uD5A5\uD574 \uB3CC\uC9C4 \uD6C4 \uD30C\uAD34\uD569\uB2C8\uB2E4."
+  - typeid: skillDesc_101
+    content: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - typeid: skillDesc_102
+    content: "\uBB3C\uB9AC \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - typeid: skillDesc_103
+    content: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - typeid: skillDesc_104
+    content: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - typeid: skillDesc_105
+    content: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - typeid: skillDesc_106
+    content: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - typeid: skillDesc_107
+    content: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - typeid: skillDesc_108
+    content: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - typeid: skillDesc_200
+    content: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - typeid: skillDesc_201
+    content: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - typeid: skillDesc_202
+    content: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - typeid: skillDesc_203
+    content: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - typeid: skillDesc_300
+    content: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - typeid: skillDesc_301
+    content: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - typeid: skillDesc_400
+    content: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - typeid: skillDesc_401
+    content: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - typeid: skillDesc_500
+    content: "\uB9C8\uBC95 \uACF5\uACA9\uC744 10\uCD08\uAC04 \uC785\uD799\uB2C8\uB2E4."
+  - typeid: synergyDesc_Devil
+    content: "\uBAA8\uB4E0 \uC544\uAD70 \uC720\uB2DB\uC758 \uACF5\uACA9\uB825\uC774
+      {0}% \uC99D\uAC00\uD569\uB2C8\uB2E4."
+  - typeid: synergyDesc_Ork
+    content: "\uBAA8\uB4E0 \uC544\uAD70 \uC720\uB2DB\uC758 \uCCB4\uB825\uC774 {0}
+      \uC99D\uAC00\uD569\uB2C8\uB2E4."
+  - typeid: synergyDesc_Dragon
+    content: "\uB77C\uC6B4\uB4DC \uC2DC\uC791\uC2DC \uC544\uAD70 \uC6A9 \uC720\uB2DB\uC758
+      \uB9C8\uB098\uAC00 \uAC00\uB4DD \uCC39\uB2C8\uB2E4."
+  - typeid: synergyDesc_Human
+    content: "\uC544\uAD70 \uC778\uAC04 \uC720\uB2DB\uC774 \uACF5\uACA9\uC2DC {0}%
+      \uD655\uB960\uB85C \uC801\uC744 \uCE68\uBB35 \uC2DC\uD0B5\uB2C8\uB2E4."
+  - typeid: synergyDesc_Elf
+    content: "\uC544\uAD70 \uC5D8\uD504 \uC720\uB2DB\uC758 \uD68C\uD53C\uAC00 {0}
+      \uC99D\uAC00\uD569\uB2C8\uB2E4."
+  - typeid: synergyDesc_Knight
+    content: "3\uCD08\uB9C8\uB2E4 {0}%  \uD655\uB960\uB85C \uBCF4\uD638\uB9C9\uC744
+      \uC0DD\uC131\uD569\uB2C8\uB2E4."
+  - typeid: synergyDesc_Mage
+    content: "\uBAA8\uB4E0 \uC801\uAD70 \uC720\uB2DB\uC758 \uB9C8\uBC95 \uC800\uD56D\uB825\uC744
+      {0}% \uAC10\uC18C\uD569\uB2C8\uB2E4."
+  - typeid: synergyDesc_Hunter
+    content: "\uC544\uAD70 \uC0AC\uB0E5\uAFBC \uC720\uB2DB\uC758 \uACF5\uACA9\uB825\uC774
+      {0}% \uC99D\uAC00\uD569\uB2C8\uB2E4."
+  - typeid: synergyDesc_Assassin
+    content: "\uACF5\uACA9\uC2DC 15% \uD655\uB960\uB85C {0}\uBC30\uC758 \uD53C\uD574\uB97C
+      \uC90D\uB2C8\uB2E4."
+  - typeid: synergyDesc_Warrior
+    content: "\uC544\uAD70 \uC804\uC0AC \uC720\uB2DB\uC758 \uBC29\uC5B4\uB825\uC774
+      {0} \uC99D\uAC00\uD569\uB2C8\uB2E4."

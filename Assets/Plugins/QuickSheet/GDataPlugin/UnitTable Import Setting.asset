@@ -55,6 +55,14 @@ MonoBehaviour:
     isEnable: 0
     isArray: 0
   - type: 5
+    name: MagicResistPower
+    isEnable: 0
+    isArray: 0
+  - type: 7
+    name: DamageType
+    isEnable: 0
+    isArray: 0
+  - type: 5
     name: SkillCoolTime
     isEnable: 0
     isArray: 0

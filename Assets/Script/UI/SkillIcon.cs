@@ -26,6 +26,7 @@ public class SkillIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public void SetUp(Unit unit)
     {
         _skillIcon.sprite = unit.skillIcon;
-        _skillDescText.text = TableData.instance.GetSkillDescTableData(unit.unitID).Desc;
+        _skillDescText.text = $"skillDesc_{unit.Data.Unitid}".Convert();
+        _skillDescGroup.SetActive(false);
     }
 }

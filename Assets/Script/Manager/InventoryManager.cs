@@ -8,7 +8,7 @@ public class InventoryManager : Singleton<InventoryManager>
     private Cell[] _cells;
 
     private bool _isMerged = false;
-    private Dictionary<int, List<Unit>> _myUnits = new Dictionary<int, List<Unit>>(); // 모든 나의 유닛들
+    private Dictionary<int, List<Unit>> _myUnits = new Dictionary<int, List<Unit>>(); // 모든 나의 유닛들 key : unitID
 
     public void BuyUnit(int unitID) // 상점에서 구매
     {
@@ -73,6 +73,7 @@ public class InventoryManager : Singleton<InventoryManager>
     {
         if (_myUnits.TryGetValue(unit.unitID, out List<Unit> list))
             list.Remove(unit);
+        FieldManager.instance.DestroyUnit(unit);
         unit.onCell.DeSetUnit();
         ObjectPoolManager.instance.ReleaseUnit(unit);
     }

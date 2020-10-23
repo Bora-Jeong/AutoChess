@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public interface IState
@@ -34,8 +35,9 @@ public class Unit : MonoBehaviour
     [HideInInspector]
     public float findTargetRange;  // 범위 안에 있는 적 탐색
 
-    private readonly float firingAngle = 45.0f;
-    private readonly float gravity = 12f;
+    // 포물선 이동
+    private readonly float _firingAngle = 45.0f;
+    private readonly float _gravity = 20f;
 
     private Animator _animator;
     private Outline _outline;
@@ -43,12 +45,20 @@ public class Unit : MonoBehaviour
 
     public float curHp;
     public float curMp;
-    public int curGold;
-    public Sprite skillIcon;
     public float curSkillCoolTime;
+
+    public float curFullHp { get; private set; }
+    public float curFullMp { get; private set; }
+    public float curAttackDamage { get; private set; }
+    public float curSkillDamage { get; private set; }
+    public float curDeffensePower { get; private set; }
+    public float curMagicResistPower { get; private set; }
+    public int curGold { get; private set; }
+
     public Cell onCell; // 현재 있는 셀 
-    public bool isInShop = false; // 필요 없을듯?
-    public bool isPlayerUnit;
+    public Sprite skillIcon;
+
+    public bool isCreep;
 
     public Unit target; // 공격 대상
     public int unitID => _unitID;
@@ -75,10 +85,16 @@ public class Unit : MonoBehaviour
         set
         {
             _star = value;
-            float salePlus = 1 + Constants.unitScaleIncreaseAmount * ( _star - 1);
-            transform.localScale = Vector3.one * Data.Scale * salePlus; // 크기 증가
+            float scalePlus = 1 + Constants.unitScaleIncreaseAmount * ( _star - 1);
+            transform.localScale = Vector3.one * Data.Scale * scalePlus; // 크기 증가
             curGold = Data.Gold * _star; // 골드 증가
-            // 공격력 강해짐 체력 증가 등
+            curFullHp = Data.Hp * Mathf.Pow(4, _star - 1); // 최대 체력 증가
+            curHp = curFullHp;
+            curFullMp = 100 * star; // 최대 마나 증가
+            curAttackDamage = Data.Attackdamage * Mathf.Pow(4, _star - 1); // 공격 데미지 증가
+            curSkillDamage = Data.Skilldamage * Mathf.Pow(4, _star - 1); // 스킬 데미지 증가
+            curDeffensePower = Data.Deffensepower *  Mathf.Pow(2, _star - 1); // 방어력 증가
+            curMagicResistPower = Data.Magicresistpower *  Mathf.Pow(2, _star - 1); // 마법 저항력 증가
         }
     }
 
@@ -90,24 +106,44 @@ public class Unit : MonoBehaviour
         _IStates[(int)State.Attack] = new AttackState(this);
         _IStates[(int)State.Dead] = new DeadState(this);
 
-        _animator = GetComponent<Animator>();
-        skillIcon = Resources.Load<Sprite>($"SkillIcon/{_unitID}");
-
         Data = TableData.instance.GetUnitTableData(_unitID);
+        GameManager.instance.OnGameStateChanged += Instance_OnGameStateChanged;
+
+        _animator = GetComponent<Animator>();
+        skillIcon = GetSkillIcon(_unitID);
+    }
+
+    private void Instance_OnGameStateChanged(object sender, System.EventArgs e)
+    {
+        if (GameManager.instance.gameState == GameManager.GameState.Prepare)
+            ResetStateValues();
     }
 
     private void OnEnable()
     {
-        curHp = Data.Hp;
-        curMp = 0f;
-        state = State.Idle;
         star = 1;
+        ResetStateValues();
+    }
+
+    private void ResetStateValues()
+    {
+        curHp = curFullHp;
+        curMp = 0;
+        state = State.Idle;
         curSkillCoolTime = 0;
+    }
+
+    private void OnDisable()
+    {
+        if (_outline != null) _outline.enabled = false;
+        onCell = null;
+        target = null;
+        isCreep = false;
     }
 
     private void Update()
     {
-        if (!GameManager.instance.isPlaying || isDead || isInShop) return;
+        if (GameManager.instance.gameState != GameManager.GameState.Battle || onCell == null || onCell.type == Cell.Type.Inventory) return;
 
         _IStates[(int)_state].Stay();
 
@@ -116,10 +152,12 @@ public class Unit : MonoBehaviour
         curSkillCoolTime = Mathf.Clamp(curSkillCoolTime - Time.deltaTime, 0, Data.Skillcooltime);
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(DamageType damageType, float damage)
     {
-        curHp = Mathf.Clamp(curHp - damage, 0, Data.Hp);
-        curMp = Mathf.Clamp(curMp + damage, 0, 100);
+        float actualDamage = damageType == DamageType.Physics ? damage / curDeffensePower : damage / curMagicResistPower;
+
+        curHp = Mathf.Clamp(curHp - actualDamage, 0, curFullHp);
+        curMp = Mathf.Clamp(curMp + actualDamage, 0, curFullMp);
 
         if (curHp <= 0)
             state = State.Dead;
@@ -161,11 +199,11 @@ public class Unit : MonoBehaviour
         float target_Distance = Vector3.Distance(transform.position, dest.position);
 
         // Calculate the velocity needed to throw the object to the target at specified angle.
-        float projectile_Velocity = target_Distance / (Mathf.Sin(2 * firingAngle * Mathf.Deg2Rad) / gravity);
+        float projectile_Velocity = target_Distance / (Mathf.Sin(2 * _firingAngle * Mathf.Deg2Rad) / _gravity);
 
         // Extract the X  Y componenent of the velocity
-        float Vx = Mathf.Sqrt(projectile_Velocity) * Mathf.Cos(firingAngle * Mathf.Deg2Rad);
-        float Vy = Mathf.Sqrt(projectile_Velocity) * Mathf.Sin(firingAngle * Mathf.Deg2Rad);
+        float Vx = Mathf.Sqrt(projectile_Velocity) * Mathf.Cos(_firingAngle * Mathf.Deg2Rad);
+        float Vy = Mathf.Sqrt(projectile_Velocity) * Mathf.Sin(_firingAngle * Mathf.Deg2Rad);
 
         // Calculate flight time.
         float flightDuration = target_Distance / Vx;
@@ -178,7 +216,7 @@ public class Unit : MonoBehaviour
 
         while (elapse_time < flightDuration)
         {
-            transform.Translate(0, (Vy - (gravity * elapse_time)) * Time.deltaTime, Vx * Time.deltaTime);
+            transform.Translate(0, (Vy - (_gravity * elapse_time)) * Time.deltaTime, Vx * Time.deltaTime);
 
             elapse_time += Time.deltaTime;
 
@@ -186,6 +224,11 @@ public class Unit : MonoBehaviour
         }
 
         transform.rotation = startRot;
+
+        while(transform.rotation != startRot)
+        {
+            transform.Rotate(startRot.eulerAngles * Time.deltaTime);
+        }
     }
 
     public void Ouline(bool on)
@@ -197,5 +240,10 @@ public class Unit : MonoBehaviour
             _outline.OutlineWidth = 5f;
         }
         _outline.enabled = on;
+    }
+
+    public static Sprite GetSkillIcon(int unitID)
+    {
+        return Resources.Load<Sprite>($"SkillIcon/{unitID}");
     }
 }

@@ -504,8 +504,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4705472284568770}
   - component: {fileID: 137036754524506648}
-  - component: {fileID: 9003448013264947574}
-  - component: {fileID: 1837625216916024866}
+  - component: {fileID: 7684401990020260806}
   m_Layer: 8
   m_Name: M12_01
   m_TagString: Untagged
@@ -616,8 +615,8 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.0025139004, y: 0.018308297, z: 0.0010130405}
     m_Extent: {x: 0.47576374, y: 0.48724955, z: 1.1973705}
   m_DirtyAABB: 0
---- !u!64 &9003448013264947574
-MeshCollider:
+--- !u!136 &7684401990020260806
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -626,22 +625,10 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 3bb8c1044e970984d9390233193326e2, type: 3}
---- !u!114 &1837625216916024866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1328320208970392}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a0eebc8f35843a4089d09b0ab55e5ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Radius: 0.47
+  m_Height: 2.51
+  m_Direction: 0
+  m_Center: {x: 0.09569165, y: -0.001761198, z: 1.5060525}
 --- !u!1 &1344885322428152
 GameObject:
   m_ObjectHideFlags: 0
@@ -700,7 +687,7 @@ Transform:
   m_GameObject: {fileID: 1371951935570834}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 4087751315754840}
   - {fileID: 4705472284568770}
@@ -745,21 +732,13 @@ MonoBehaviour:
   _attackAnimName: Attack01
   _skillAnimName: Skill01
   _deadAnimName: Die
-  name: "\uBC15\uC950\uAE30\uC218"
-  fullHp: 0
-  hp: 0
-  mp: 0
   findTargetRange: 0
-  attackTargetRange: 10
-  attackTermTime: 1
-  attackDamage: 1
-  skillDamage: 20
-  moveSpeed: 3
-  isPlayerUnit: 0
-  gold: 1
-  clas: 2
-  species: 0
-  isInShop: 0
+  curHp: 0
+  curMp: 0
+  curSkillCoolTime: 0
+  onCell: {fileID: 0}
+  skillIcon: {fileID: 0}
+  isCreep: 0
   target: {fileID: 0}
 --- !u!1 &1376380889371122
 GameObject:
@@ -1909,7 +1888,7 @@ PrefabInstance:
     - target: {fileID: 5574012023792320323, guid: e06d3e04fdc0ca9469e52adca9f5edb4,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.025512695
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5574012023792320323, guid: e06d3e04fdc0ca9469e52adca9f5edb4,
         type: 3}

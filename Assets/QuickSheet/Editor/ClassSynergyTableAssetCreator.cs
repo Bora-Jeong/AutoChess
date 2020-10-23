@@ -8,12 +8,12 @@ using UnityQuickSheet;
 /// 
 public partial class GoogleDataAssetUtility
 {
-    [MenuItem("Assets/Create/Google/SkillDescTable")]
-    public static void CreateSkillDescTableAssetFile()
+    [MenuItem("Assets/Create/Google/ClassSynergyTable")]
+    public static void CreateClassSynergyTableAssetFile()
     {
-        SkillDescTable asset = CustomAssetUtility.CreateAsset<SkillDescTable>();
+        ClassSynergyTable asset = CustomAssetUtility.CreateAsset<ClassSynergyTable>();
         asset.SheetName = "DataTable";
-        asset.WorksheetName = "SkillDescTable";
+        asset.WorksheetName = "ClassSynergyTable";
         EditorUtility.SetDirty(asset);        
     }
     

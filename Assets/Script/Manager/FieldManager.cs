@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Numerics;
+using System.Threading;
 
 public class FieldManager : Singleton<FieldManager>
 {
@@ -10,12 +11,35 @@ public class FieldManager : Singleton<FieldManager>
     private Cell[] _myCells;
     [SerializeField]
     private Cell[] _enemyCells;
+    [SerializeField]
+    private Sprite[] _classIcon;
+    [SerializeField]
+    private Sprite[] _speciesIcon;
 
     public event EventHandler OnFieldChanged;
+
+    private Dictionary<int, int> _unitsOnField = new Dictionary<int, int>(); // key : unitID , value : count
+
+    public Dictionary<int, int> unitsOnField => _unitsOnField;
 
     public void MoveUnitToCell(Unit unit, Cell dest)
     {
         bool fieldChanged = unit.onCell.type != dest.type; // 인벤토리 <-> 필드로 이동
+
+        if (fieldChanged)
+        {
+            if(dest.type == Cell.Type.MyField)  // 인벤토리 -> 필드
+            {
+                if (_unitsOnField.ContainsKey(unit.Data.Unitid))
+                    _unitsOnField[unit.Data.Unitid]++;
+                else
+                    _unitsOnField.Add(unit.Data.Unitid, 1);
+            }
+            else // 필드 -> 인벤토리
+            {
+                _unitsOnField[unit.Data.Unitid]--;
+            }
+        }
 
         dest.SetUnit(unit);
         unit.MoveToCell(dest);
@@ -32,7 +56,13 @@ public class FieldManager : Singleton<FieldManager>
 
     private void UpdateSynergy() // 시너지 업데이트
     {
+        
+    }
 
+    public void DestroyUnit(Unit unit) // 근본적인 삭제는 Inventory Manager에서
+    {
+        if (unit.onCell.type == Cell.Type.MyField)
+            _unitsOnField[unit.unitID]--;
     }
 
     public int GetCountOfChessOnMyField()
@@ -45,5 +75,13 @@ public class FieldManager : Singleton<FieldManager>
         }
         return count;
     }
+
+    public void Clear()
+    {
+        _unitsOnField.Clear();
+    }
+
+    public Sprite GetClassIcon(Clas clas) => _classIcon[(int)clas];
+    public Sprite GetSpeciesIcon(Species species) => _speciesIcon[(int)species];
 
 }

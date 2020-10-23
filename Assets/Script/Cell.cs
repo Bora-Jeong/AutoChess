@@ -37,7 +37,6 @@ public class Cell : MonoBehaviour
         _unit = ObjectPoolManager.instance.GetUnit(unitID);
         _unit.transform.position = transform.position;
         _unit.transform.localEulerAngles = Vector3.zero;
-        _unit.isPlayerUnit = true;
         _unit.onCell = this;
         return _unit;
     }

@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24fc8d61262acea4bab0370d7deeb110, type: 3}
+  m_Name: New SpeciesSynergyTable
+  m_EditorClassIdentifier: 
+  SheetName: DataTable
+  WorksheetName: SpeciesSynergyTable
+  dataArray:
+  - species: 0
+    typecount: 0300000006000000
+    values:
+    - 40
+    - 35
+  - species: 1
+    typecount: 0200000004000000
+    values:
+    - 35
+    - 45
+  - species: 2
+    typecount: 0200000004000000
+    values:
+    - 30
+    - 40
+  - species: 3
+    typecount: 0300000006000000
+    values:
+    - 3.5
+    - 4.5
+  - species: 4
+    typecount: 020000000400000006000000
+    values:
+    - 5
+    - 5
+    - 9
