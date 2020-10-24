@@ -33,12 +33,12 @@ public class UnitTableData
   public float Hp { get {return hp; } set { this.hp = value;} }
   
   [SerializeField]
-  float attackdamage;
-  public float Attackdamage { get {return attackdamage; } set { this.attackdamage = value;} }
+  float attackpower;
+  public float Attackpower { get {return attackpower; } set { this.attackpower = value;} }
   
   [SerializeField]
-  float skilldamage;
-  public float Skilldamage { get {return skilldamage; } set { this.skilldamage = value;} }
+  float magicpower;
+  public float Magicpower { get {return magicpower; } set { this.magicpower = value;} }
   
   [SerializeField]
   float deffensepower;

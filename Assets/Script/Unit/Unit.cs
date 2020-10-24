@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public interface IState
 {
@@ -15,21 +16,18 @@ public class Unit : MonoBehaviour
     public enum State
     {
         Idle,
-        Walk,
+        Move,
         Attack,
+        Stun,
         Dead
     }
 
-    [SerializeField]
-    private int _unitID;
     [SerializeField]
     private string _idleAnimName = "Idle01";
     [SerializeField]
     private string _walkAnimName = "Run";
     [SerializeField]
-    private string _attackAnimName = "Attack01";
-    [SerializeField]
-    private string _skillAnimName = "Skill01";
+    private string _stunAnimName = "Stun";
     [SerializeField]
     private string _deadAnimName = "Die";
     [HideInInspector]
@@ -41,7 +39,7 @@ public class Unit : MonoBehaviour
 
     private Animator _animator;
     private Outline _outline;
-    private IState[] _IStates;  // FSM 인터페이스 저장
+    private IState[] _IStates;  // State 인터페이스 저장
 
     public float curHp;
     public float curMp;
@@ -49,21 +47,43 @@ public class Unit : MonoBehaviour
 
     public float curFullHp { get; private set; }
     public float curFullMp { get; private set; }
-    public float curAttackDamage { get; private set; }
-    public float curSkillDamage { get; private set; }
+    public float curAttackPower { get; private set; }
+    public float curMagicPower { get; private set; }
     public float curDeffensePower { get; private set; }
     public float curMagicResistPower { get; private set; }
+
+    public float synergyHp;
+    public float synergyAttackPower;
+    public float synergyMagicPower;
+    public float synergyDeffensePower;
+    public float synergyMagicResistPower;
+    public float synergyEvasion; // 상대방의 공격을 회피할 확률
+    public float synergyMakeSilent; // 상대방을 공격할 때 침묵시킬 확률
+
+    public static bool dragonSynergy;
+    public static float knightSynergy; // 쉴드 발동 확률
+    public static float assassinSynergyPercent; // 치명타 발생 확률
+    public static float assassinSynergyCritical; // 치명타 몇배
+
+    private float _kinghtSynergyTimer;
+    private bool _isInvincibility; // 무적
+
+    private Vector3 _prevPos;
+    private Quaternion _prevRot;
+
+    // 시너지가 적용된 전투중 스탯s
+    public float fullHpOnBattle => curFullHp + synergyHp;
+    public float attackPowerOnBattle => curAttackPower + synergyAttackPower;
+    public float magicPowerOnBattle => curMagicPower + synergyMagicPower;
+    public float deffensePowerOnBattle => curDeffensePower + synergyDeffensePower;
+    public float magicResistPowerOnBattle => curMagicResistPower + synergyMagicResistPower;
     public int curGold { get; private set; }
 
     public Cell onCell; // 현재 있는 셀 
     public Sprite skillIcon;
-
     public bool isCreep;
-
     public Unit target; // 공격 대상
-    public int unitID => _unitID;
     public bool isDead => state == State.Dead;
-
     public UnitTableData Data { get; private set; }
 
     private State _state;
@@ -90,9 +110,9 @@ public class Unit : MonoBehaviour
             curGold = Data.Gold * _star; // 골드 증가
             curFullHp = Data.Hp * Mathf.Pow(4, _star - 1); // 최대 체력 증가
             curHp = curFullHp;
-            curFullMp = 100 * star; // 최대 마나 증가
-            curAttackDamage = Data.Attackdamage * Mathf.Pow(4, _star - 1); // 공격 데미지 증가
-            curSkillDamage = Data.Skilldamage * Mathf.Pow(4, _star - 1); // 스킬 데미지 증가
+            curFullMp = 100 * _star; // 최대 마나 증가
+            curAttackPower = Data.Attackpower * Mathf.Pow(4, _star - 1); // 공격력 증가
+            curMagicPower = Data.Magicpower * Mathf.Pow(4, _star - 1); // 마법 주문력 증가
             curDeffensePower = Data.Deffensepower *  Mathf.Pow(2, _star - 1); // 방어력 증가
             curMagicResistPower = Data.Magicresistpower *  Mathf.Pow(2, _star - 1); // 마법 저항력 증가
         }
@@ -102,35 +122,63 @@ public class Unit : MonoBehaviour
     {
         _IStates = new IState[System.Enum.GetValues(typeof(State)).Length];
         _IStates[(int)State.Idle] = new IdleState(this);
-        _IStates[(int)State.Walk] = new WalkState(this);
+        _IStates[(int)State.Move] = new MoveState(this);
         _IStates[(int)State.Attack] = new AttackState(this);
+        _IStates[(int)State.Stun] = new StunState(this);
         _IStates[(int)State.Dead] = new DeadState(this);
 
-        Data = TableData.instance.GetUnitTableData(_unitID);
-        GameManager.instance.OnGameStateChanged += Instance_OnGameStateChanged;
+        string[] result =  gameObject.name.Split('_', '(');
+        if(int.TryParse(result[1], out int unitID))
+        {
+            Data = TableData.instance.GetUnitTableData(unitID);
+            GameManager.instance.OnGameStateChanged += Instance_OnGameStateChanged;
 
-        _animator = GetComponent<Animator>();
-        skillIcon = GetSkillIcon(_unitID);
+            _animator = GetComponent<Animator>();
+            skillIcon = GetSkillIcon(unitID);
+        }
     }
 
     private void Instance_OnGameStateChanged(object sender, System.EventArgs e)
     {
-        if (GameManager.instance.gameState == GameManager.GameState.Prepare)
-            ResetStateValues();
+        if (GameManager.instance.gameState == GameState.Prepare)
+        {
+            if(onCell != null && onCell.type == Cell.Type.MyField)
+            {
+                transform.position = _prevPos;
+                transform.rotation = _prevRot;
+                ResetState();
+            }
+        }
+        else if(GameManager.instance.gameState == GameState.Battle)
+        {
+            if (onCell != null && onCell.type == Cell.Type.MyField)
+            {
+                curHp = fullHpOnBattle;
+                if (dragonSynergy && Data.CLAS == Clas.Dragon)
+                    curMp = curFullMp;
+                if (knightSynergy > 0 && Data.SPECIES == Species.Knight)
+                    _kinghtSynergyTimer = Constants.kinghtShieldGenTime;
+                _prevPos = transform.position;
+                _prevRot = transform.rotation;
+            }
+        }
     }
 
     private void OnEnable()
     {
         star = 1;
-        ResetStateValues();
+        ResetState();
     }
 
-    private void ResetStateValues()
+    private void ResetState() // 라운드가 새로 시작할 때 마다 호출
     {
         curHp = curFullHp;
         curMp = 0;
         state = State.Idle;
         curSkillCoolTime = 0;
+        synergyHp = synergyAttackPower = synergyMagicPower = synergyDeffensePower =
+            synergyMagicResistPower = synergyEvasion =  synergyMakeSilent = 0;
+        _isInvincibility = false;
     }
 
     private void OnDisable()
@@ -143,21 +191,49 @@ public class Unit : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.instance.gameState != GameManager.GameState.Battle || onCell == null || onCell.type == Cell.Type.Inventory) return;
+        if (GameManager.instance.gameState != GameState.Battle || onCell == null || onCell.type == Cell.Type.Inventory) return;
 
         _IStates[(int)_state].Stay();
 
-        findTargetRange += Time.deltaTime;
-        findTargetRange = Mathf.Clamp(findTargetRange, 10f, 500f);
+        findTargetRange = Mathf.Clamp(findTargetRange + Time.deltaTime, 10f, 500f);
         curSkillCoolTime = Mathf.Clamp(curSkillCoolTime - Time.deltaTime, 0, Data.Skillcooltime);
+
+        if (_kinghtSynergyTimer > 0) // 기사 시너지 
+            CheckKnightSynergy();
     }
 
-    public void TakeDamage(DamageType damageType, float damage)
+    private void CheckKnightSynergy()
     {
-        float actualDamage = damageType == DamageType.Physics ? damage / curDeffensePower : damage / curMagicResistPower;
+        _kinghtSynergyTimer -= Time.deltaTime;
+        if (_kinghtSynergyTimer <= 0)
+        {
+            _isInvincibility = false;
+            if(Random.Range(0, 100) < knightSynergy) // 시너지 발동
+            {
+                _isInvincibility = true;
+                ObjectPoolManager.instance.LaunchFx(transform, ObjectPoolManager.FxType.Shield);
+            }
+            _kinghtSynergyTimer = Constants.kinghtShieldGenTime;
+        }
+    }
 
-        curHp = Mathf.Clamp(curHp - actualDamage, 0, curFullHp);
+    public void TakeDamage(DamageType damageType, float damage, bool isCritical)
+    {
+        if (_isInvincibility) return; // 무적
+        if(synergyEvasion > 0 && Random.Range(0, 100) < synergyEvasion) // 회피
+        {
+            PopUpText.Create(this, "evasion");
+            return;
+        }
+
+        float actualDamage = damageType == DamageType.Physics ? damage / deffensePowerOnBattle : damage / magicPowerOnBattle;
+
+        curHp = Mathf.Clamp(curHp - actualDamage, 0, fullHpOnBattle);
         curMp = Mathf.Clamp(curMp + actualDamage, 0, curFullMp);
+
+        PopUpText.Create(this, ((int)actualDamage).ToString(), isCritical);
+
+        if (DevCheat.instance.UNDEAD) return;         // 개발용
 
         if (curHp <= 0)
             state = State.Dead;
@@ -171,12 +247,8 @@ public class Unit : MonoBehaviour
                 _animator.Play(_idleAnimName);
                 break;
 
-            case State.Walk:
+            case State.Move:
                 _animator.Play(_walkAnimName);
-                break;
-
-            case State.Attack:
-                _animator.Play(_attackAnimName);
                 break;
 
             case State.Dead:

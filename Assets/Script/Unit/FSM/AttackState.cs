@@ -36,8 +36,23 @@ public class AttackState : MonoBehaviour, IState
 
             yield return new WaitForSeconds(0.3f);
 
-            _owner.target.TakeDamage( _owner.Data.DAMAGETYPE, _owner.curAttackDamage);
-            _owner.curMp = Mathf.Clamp(_owner.curMp + _owner.curAttackDamage, 0, _owner.curFullMp);
+            float damage = _owner.Data.DAMAGETYPE == DamageType.Physics ? _owner.attackPowerOnBattle : _owner.magicPowerOnBattle;
+            damage *= 30;
+
+            bool critical = false;
+            if (Unit.assassinSynergyPercent > 0 && _owner.Data.SPECIES == Species.Assassin && Random.Range(0, 100) < Unit.assassinSynergyPercent) // 암살자 치명타
+            {
+                damage *= Unit.assassinSynergyCritical;
+                critical = true;
+            }
+                  
+            _owner.target.TakeDamage( _owner.Data.DAMAGETYPE, damage, critical);
+            _owner.curMp = Mathf.Clamp(_owner.curMp + damage, 0, _owner.curFullMp);
+
+            if(_owner.synergyMakeSilent > 0 && Random.Range(0, 100) < _owner.synergyMakeSilent)   // 침묵시킴
+            {
+                _owner.target.state = Unit.State.Stun;
+            }
 
             yield return new WaitForSeconds(_owner.Data.Attackterm - 0.3f);
 
@@ -49,7 +64,9 @@ public class AttackState : MonoBehaviour, IState
 
                 yield return new WaitForSeconds(0.3f);
 
-                _owner.target.TakeDamage(_owner.Data.DAMAGETYPE, _owner.curSkillDamage);
+                damage = _owner.Data.DAMAGETYPE == DamageType.Physics ? _owner.attackPowerOnBattle : _owner.magicPowerOnBattle;
+                damage *= 50;
+                _owner.target.TakeDamage(_owner.Data.DAMAGETYPE, damage, false);
             }
         }
     }

@@ -21,9 +21,11 @@ MonoBehaviour:
     species: 0
     gold: 1
     hp: 100
-    attackdamage: 1
-    skilldamage: 5
+    attackpower: 1
+    magicpower: 1
     deffensepower: 10
+    magicresistpower: 10
+    damagetype: 0
     skillcooltime: 5
     scale: 1
     attackrange: 3
@@ -35,9 +37,11 @@ MonoBehaviour:
     species: 0
     gold: 1
     hp: 100
-    attackdamage: 5
-    skilldamage: 20
+    attackpower: 1
+    magicpower: 1
     deffensepower: 1
+    magicresistpower: 10
+    damagetype: 0
     skillcooltime: 5
     scale: 1
     attackrange: 10
@@ -49,9 +53,11 @@ MonoBehaviour:
     species: 3
     gold: 1
     hp: 100
-    attackdamage: 5
-    skilldamage: 20
+    attackpower: 1
+    magicpower: 1
     deffensepower: 1
+    magicresistpower: 10
+    damagetype: 1
     skillcooltime: 5
     scale: 1
     attackrange: 10
@@ -63,9 +69,11 @@ MonoBehaviour:
     species: 1
     gold: 1
     hp: 100
-    attackdamage: 1
-    skilldamage: 5
+    attackpower: 1
+    magicpower: 1
     deffensepower: 10
+    magicresistpower: 10
+    damagetype: 1
     skillcooltime: 10
     scale: 1
     attackrange: 3
@@ -77,9 +85,11 @@ MonoBehaviour:
     species: 3
     gold: 1
     hp: 100
-    attackdamage: 1
-    skilldamage: 5
+    attackpower: 1
+    magicpower: 1
     deffensepower: 10
+    magicresistpower: 10
+    damagetype: 0
     skillcooltime: 10
     scale: 1
     attackrange: 3
@@ -91,9 +101,11 @@ MonoBehaviour:
     species: 1
     gold: 1
     hp: 100
-    attackdamage: 1
-    skilldamage: 5
+    attackpower: 1
+    magicpower: 1
     deffensepower: 10
+    magicresistpower: 10
+    damagetype: 1
     skillcooltime: 5
     scale: 1
     attackrange: 3
@@ -105,9 +117,11 @@ MonoBehaviour:
     species: 2
     gold: 1
     hp: 100
-    attackdamage: 1
-    skilldamage: 5
+    attackpower: 1
+    magicpower: 1
     deffensepower: 10
+    magicresistpower: 10
+    damagetype: 0
     skillcooltime: 10
     scale: 1
     attackrange: 3
@@ -119,9 +133,11 @@ MonoBehaviour:
     species: 4
     gold: 1
     hp: 100
-    attackdamage: 1
-    skilldamage: 5
+    attackpower: 1
+    magicpower: 1
     deffensepower: 10
+    magicresistpower: 10
+    damagetype: 0
     skillcooltime: 5
     scale: 1
     attackrange: 3
@@ -133,9 +149,11 @@ MonoBehaviour:
     species: 3
     gold: 1
     hp: 100
-    attackdamage: 1
-    skilldamage: 5
+    attackpower: 1
+    magicpower: 1
     deffensepower: 10
+    magicresistpower: 10
+    damagetype: 0
     skillcooltime: 10
     scale: 1
     attackrange: 3
@@ -147,9 +165,11 @@ MonoBehaviour:
     species: 2
     gold: 2
     hp: 200
-    attackdamage: 1
-    skilldamage: 5
+    attackpower: 2
+    magicpower: 2
     deffensepower: 10
+    magicresistpower: 10
+    damagetype: 1
     skillcooltime: 10
     scale: 1
     attackrange: 3
@@ -161,9 +181,11 @@ MonoBehaviour:
     species: 4
     gold: 2
     hp: 200
-    attackdamage: 1
-    skilldamage: 5
+    attackpower: 2
+    magicpower: 2
     deffensepower: 10
+    magicresistpower: 10
+    damagetype: 1
     skillcooltime: 5
     scale: 1
     attackrange: 3
@@ -175,9 +197,11 @@ MonoBehaviour:
     species: 3
     gold: 2
     hp: 200
-    attackdamage: 1
-    skilldamage: 5
+    attackpower: 2
+    magicpower: 2
     deffensepower: 10
+    magicresistpower: 10
+    damagetype: 0
     skillcooltime: 10
     scale: 1
     attackrange: 3
@@ -189,9 +213,11 @@ MonoBehaviour:
     species: 4
     gold: 2
     hp: 200
-    attackdamage: 1
-    skilldamage: 5
+    attackpower: 2
+    magicpower: 2
     deffensepower: 10
+    magicresistpower: 10
+    damagetype: 0
     skillcooltime: 10
     scale: 1
     attackrange: 3
@@ -203,9 +229,11 @@ MonoBehaviour:
     species: 0
     gold: 3
     hp: 300
-    attackdamage: 1
-    skilldamage: 5
+    attackpower: 3
+    magicpower: 3
     deffensepower: 10
+    magicresistpower: 10
+    damagetype: 1
     skillcooltime: 10
     scale: 1
     attackrange: 3
@@ -217,9 +245,11 @@ MonoBehaviour:
     species: 2
     gold: 3
     hp: 300
-    attackdamage: 1
-    skilldamage: 5
+    attackpower: 3
+    magicpower: 3
     deffensepower: 10
+    magicresistpower: 10
+    damagetype: 1
     skillcooltime: 5
     scale: 1
     attackrange: 3
@@ -231,9 +261,11 @@ MonoBehaviour:
     species: 3
     gold: 4
     hp: 400
-    attackdamage: 1
-    skilldamage: 5
+    attackpower: 4
+    magicpower: 4
     deffensepower: 10
+    magicresistpower: 10
+    damagetype: 0
     skillcooltime: 10
     scale: 1
     attackrange: 3
@@ -245,9 +277,11 @@ MonoBehaviour:
     species: 2
     gold: 4
     hp: 400
-    attackdamage: 1
-    skilldamage: 5
+    attackpower: 4
+    magicpower: 4
     deffensepower: 10
+    magicresistpower: 10
+    damagetype: 0
     skillcooltime: 5
     scale: 1
     attackrange: 3
@@ -259,9 +293,11 @@ MonoBehaviour:
     species: 1
     gold: 5
     hp: 500
-    attackdamage: 1
-    skilldamage: 5
+    attackpower: 5
+    magicpower: 5
     deffensepower: 10
+    magicresistpower: 10
+    damagetype: 1
     skillcooltime: 5
     scale: 1
     attackrange: 3

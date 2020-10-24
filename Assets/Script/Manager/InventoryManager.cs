@@ -17,13 +17,13 @@ public class InventoryManager : Singleton<InventoryManager>
             if (!_cells[i].isOccupied)
             {
                 Unit unit = _cells[i].SpawnUnit(unitID);
-                if (_myUnits.TryGetValue(unit.unitID, out List<Unit> list))
+                if (_myUnits.TryGetValue(unit.Data.Unitid, out List<Unit> list))
                     list.Add(unit);
                 else
                 {
                     List<Unit> newList = new List<Unit>();
                     newList.Add(unit);
-                    _myUnits.Add(unit.unitID, newList);
+                    _myUnits.Add(unit.Data.Unitid, newList);
                 }
                 break;
             }
@@ -69,13 +69,20 @@ public class InventoryManager : Singleton<InventoryManager>
         }
     }
 
+    public void SellUnit(Unit unit)
+    {
+        Player.instance.gold += unit.curGold;
+        DestroyUnit(unit);
+    }
+
     public void DestroyUnit(Unit unit) // 합쳐지면서 사라지는 유닛
     {
-        if (_myUnits.TryGetValue(unit.unitID, out List<Unit> list))
+        if (_myUnits.TryGetValue(unit.Data.Unitid, out List<Unit> list))
             list.Remove(unit);
         FieldManager.instance.DestroyUnit(unit);
         unit.onCell.DeSetUnit();
-        ObjectPoolManager.instance.ReleaseUnit(unit);
+        FieldManager.instance.FieldChanged();
+        ObjectPoolManager.instance.Release(unit);
     }
 
     public void Clear()
@@ -83,6 +90,14 @@ public class InventoryManager : Singleton<InventoryManager>
         foreach(var pair in _myUnits)
             for (int i = 0; i < pair.Value.Count; i++)
                 DestroyUnit(pair.Value[i]);
+    }
+
+    public void ClearMyField()
+    {
+        foreach (var pair in _myUnits)
+            for (int i = 0; i < pair.Value.Count; i++)
+                if(pair.Value[i].onCell.type == Cell.Type.MyField)
+                    DestroyUnit(pair.Value[i]);
     }
 
     public bool IsFull()

@@ -8,18 +8,25 @@ public class LoadingPanel : PanelBase<LoadingPanel>
     [SerializeField]
     private Slider _loadingBar;
 
-    public void LoadAllUnit() // 모든 유닛을 한개씩 미리 로드해놓음
+    public void DownloadUnits() // 모든 유닛을 한개씩 미리 로드해놓음
     {
+        StartCoroutine(LoadUnits());
+    }
+
+    private IEnumerator LoadUnits()
+    {
+        yield return null;
         _loadingBar.value = 0;
         var unitDic = TableData.instance.unitTableDic;
-        int count = 0; 
-        foreach(var pair in unitDic)
+        int count = 0;
+        foreach (var pair in unitDic)
         {
             Unit unit = ObjectPoolManager.instance.GetUnit(pair.Key);
-            ObjectPoolManager.instance.ReleaseUnit(unit);
+            ObjectPoolManager.instance.Release(unit);
             count++;
             _loadingBar.value = count / (float)unitDic.Count;
         }
+
         LobbyPanel.instance.Show();
         Hide();
     }

@@ -12577,16 +12577,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a06f98a343c95242a4fbd2df198fa1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _unitID: 202
   _idleAnimName: idle1
   _walkAnimName: walk
-  _attackAnimName: atack1
-  _skillAnimName: melee atack
+  _stunAnimName: Idle2
   _deadAnimName: death
   findTargetRange: 0
   curHp: 0
   curMp: 0
   curSkillCoolTime: 0
+  synergyHp: 0
+  synergyAttackPower: 0
+  synergyMagicPower: 0
+  synergyDeffensePower: 0
+  synergyMagicResistPower: 0
+  synergyEvasion: 0
+  synergyMakeSilent: 0
   onCell: {fileID: 0}
   skillIcon: {fileID: 0}
   isCreep: 0

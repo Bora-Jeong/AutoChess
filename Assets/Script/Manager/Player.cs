@@ -23,6 +23,11 @@ public class Player : Singleton<Player>
         set
         {
             _exp = value;
+            while(_exp >= Constants.requiredExpToLevelUp[level]) // 레벨업
+            {
+                _exp -= Constants.requiredExpToLevelUp[level];
+                level++;
+            }
             OnExpChanged?.Invoke(this, EventArgs.Empty);
         }
     }
@@ -38,8 +43,8 @@ public class Player : Singleton<Player>
         }
     }
 
-    private int _hp;
-    public int hp
+    private float _hp;
+    public float hp
     {
         get => _hp;
         set

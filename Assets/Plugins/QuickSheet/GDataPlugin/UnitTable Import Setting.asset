@@ -43,11 +43,11 @@ MonoBehaviour:
     isEnable: 0
     isArray: 0
   - type: 5
-    name: AttackDamage
+    name: AttackPower
     isEnable: 0
     isArray: 0
   - type: 5
-    name: SkillDamage
+    name: MagicPower
     isEnable: 0
     isArray: 0
   - type: 5

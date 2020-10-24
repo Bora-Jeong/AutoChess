@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 public enum Clas
 {
@@ -24,6 +25,21 @@ public enum DamageType
     Magic
 }
 
+public enum GameState
+{
+    Prepare,
+    Wait,
+    Battle,
+    Result
+}
+
+public enum RoundResult
+{
+    Win,
+    Draw,
+    Lose
+}
+
 public static class Constants
 {
     // Game State 지속 시간
@@ -35,7 +51,13 @@ public static class Constants
     public static readonly int playerMaxLevel = 10; // 플레이어 최대 레벨
     public static readonly int unitMaxGold = 5; // 유닛 최대 골드
     public static readonly int requiredGoldToShuffleShop = 2; // 상점 셔플을 위해 필요한 골드
+    public static readonly int requiredGoldToBuyExp = 5;
+    public static readonly int amountOfExpBounght = 4;
     public static readonly float unitScaleIncreaseAmount = 0.3f;  // 1성 1 , 2성 1.3, 3성 1.6
+
+    public static float unitStunTime = 3f; // 침묵 3초
+    public static float kinghtShieldGenTime = 3f; // 쉴드 3초마다 확률적으로 생성
+    public static float assassinCriticalPercent = 15f; // 치명타 발생 확률
 
     public static int[] unitSpawnPercentInShop =
     {
@@ -49,6 +71,11 @@ public static class Constants
         24, 30, 30, 15, 1, // 플레이어 8레벨
         22, 30, 25, 20, 3, // 플레이어 9레벨
         19, 25, 25, 25, 6 // 플레이어 10레벨
+    };
+
+    public static int[] requiredExpToLevelUp =
+    {
+        1, 1, 2, 4, 8, 16, 24, 32, 40
     };
 
     public static string ToName(this Clas cls)
@@ -103,4 +130,11 @@ public static class Constants
     }
 
     public static string Convert(this string str) => TableData.instance.GetStringTableData(str);
+
+    public static Color HexToColor(this string hex)
+    {
+        if (ColorUtility.TryParseHtmlString(hex, out Color color))
+            return color;
+       return Color.white;
+    }
 }

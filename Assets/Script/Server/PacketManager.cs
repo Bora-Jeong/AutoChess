@@ -112,7 +112,7 @@ public class PacketManager : HNET.CHNetConnector
             LoginPanel.instance.SaveCurrentInfo();
             LoginPanel.instance.Hide();
             LoadingPanel.instance.Show();
-            LoadingPanel.instance.LoadAllUnit();
+            LoadingPanel.instance.DownloadUnits();
         }
         else
         {

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject _devCheat;
+
     private MonoPanel[] _panels;
     private void Awake()
     {
@@ -18,12 +21,7 @@ public class UIManager : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            if (ShopPanel.instance.isActiveAndEnabled)
-                ShopPanel.instance.Hide();
-            else
-                ShopPanel.instance.Show();
-        }
+        if(Input.GetMouseButtonDown(2))
+            _devCheat.SetActive(!_devCheat.activeSelf);
     }
 }

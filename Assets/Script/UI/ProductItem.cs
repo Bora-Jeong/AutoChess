@@ -18,17 +18,19 @@ public class ProductItem : MonoBehaviour
     public void SetUp(Unit unit)
     {
         if (_unit != null)
-            ObjectPoolManager.instance.ReleaseUnit(_unit);
+            ObjectPoolManager.instance.Release(_unit);
 
         _unit = unit;
         _nameText.text = _unit.Data.Name;
         _classText.text = _unit.Data.CLAS.ToName();
         _speciesText.text = _unit.Data.SPECIES.ToName();
         _goldText.text = $"Gold {_unit.Data.Gold}";
+        gameObject.SetActive(true);
     }
 
     public void OnClick()
     {
         ShopPanel.instance.BuyUnit(_unit);
+        gameObject.SetActive(false);
     }
 }

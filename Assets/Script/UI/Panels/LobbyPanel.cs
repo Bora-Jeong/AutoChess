@@ -22,8 +22,8 @@ public class LobbyPanel : PanelBase<LobbyPanel>
     [SerializeField] private Transform _renderPosition;
     [SerializeField] private Text _hpText;
     [SerializeField] private Text _damageTypeText;
-    [SerializeField] private Text _attackDamageText;
-    [SerializeField] private Text _skillDamageText;
+    [SerializeField] private Text _attackPowerText;
+    [SerializeField] private Text _magicPowerText;
     [SerializeField] private Text _deffensePowerText;
     [SerializeField] private Text _magicResistPowerText;
     [SerializeField] private Text _skillCoolTimeText;
@@ -97,7 +97,7 @@ public class LobbyPanel : PanelBase<LobbyPanel>
     public void OnUnitListItemClick(int unitID)
     {
         if(_selectedUnit != null)
-            ObjectPoolManager.instance.ReleaseUnit(_selectedUnit);
+            ObjectPoolManager.instance.Release(_selectedUnit);
 
         _selectedUnitInfo.SetActive(true);
         _selectedUnit = ObjectPoolManager.instance.GetUnit(unitID);
@@ -106,9 +106,10 @@ public class LobbyPanel : PanelBase<LobbyPanel>
         _selectedUnit.transform.localEulerAngles = Vector3.zero;
         _hpText.text = $"체력: {_selectedUnit.Data.Hp}";
         _damageTypeText.text = $"피해 유형{_selectedUnit.Data.DAMAGETYPE.ToName()}";
-        _attackDamageText.text = $"공격 데미지: {_selectedUnit.Data.Attackdamage}";
-        _skillDamageText.text = $"스킬 데미지: {_selectedUnit.Data.Skilldamage}";
+        _attackPowerText.text = $"공격력: {_selectedUnit.Data.Attackpower}";
+        _magicPowerText.text = $"마법 주문력: {_selectedUnit.Data.Magicpower}";
         _deffensePowerText.text = $"방어력: {_selectedUnit.Data.Deffensepower}";
+        _magicResistPowerText.text = $"마법 저항력: {_selectedUnit.Data.Magicresistpower}";
         _skillCoolTimeText.text = $"스킬 쿨타임: {_selectedUnit.Data.Skillcooltime}초";
         _skillIcon.SetUp(_selectedUnit);
     }
@@ -128,6 +129,16 @@ public class LobbyPanel : PanelBase<LobbyPanel>
                 (speciese == 0 || (int)_unitList[i].data.SPECIES == speciese - 1) &&
                 (gold == 0 || _unitList[i].data.Gold == gold));
         }
+    }
+
+    public override void Hide()
+    {
+        if (_selectedUnit != null)
+        {
+            ObjectPoolManager.instance.Release(_selectedUnit);
+            _selectedUnit = null;
+        }
+        base.Hide();
     }
 
     public void OnStartButtonClick()
