@@ -8,6 +8,8 @@ public class GameManager : Singleton<GameManager>
 {
     [SerializeField]
     private Text _timerText;
+    [SerializeField]
+    private Camera[] _cameras;
 
     public bool isPlaying { get; private set; }
 
@@ -80,6 +82,7 @@ public class GameManager : Singleton<GameManager>
         Player.instance.gold = 1;
         round = 0;
         _succWin = _succLose = 0;
+        SetCamera(Cam.Game);
         LobbyPanel.instance.Hide();
         GamePanel.instance.Show();
         StartCoroutine(GameScheduler());
@@ -132,7 +135,15 @@ public class GameManager : Singleton<GameManager>
             yield return null;
 
             if (_timer <= 0)
+            {
                 gameState = (GameState)(((int)gameState + 1) % Enum.GetValues(typeof(GameState)).Length);
+            }
         }
+    }
+
+    public void SetCamera(Cam cam)
+    {
+        for (int i = 0; i < _cameras.Length; i++)
+            _cameras[i].enabled = i == (int)cam;
     }
 }

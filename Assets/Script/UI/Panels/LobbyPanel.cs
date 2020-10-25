@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class LobbyPanel : PanelBase<LobbyPanel>
 {
-    [SerializeField] private GameObject[] _borders;
+    [SerializeField] private Text _nicknameText;
 
     [Header("Ranking Tab")]
     [SerializeField] private Transform _rankingItemRoot;
@@ -35,7 +35,6 @@ public class LobbyPanel : PanelBase<LobbyPanel>
     public override void Init()
     {
         InitUnitTab();
-        SetTab(0);
     }
 
     public void RefreshRanking(HNetPacket Packet)
@@ -59,6 +58,7 @@ public class LobbyPanel : PanelBase<LobbyPanel>
             rank++;
         }
 
+        _nicknameText.text = PlayerPrefs.GetString("Nickname", "New Player");
     }
 
     private void InitUnitTab()
@@ -129,6 +129,8 @@ public class LobbyPanel : PanelBase<LobbyPanel>
                 (speciese == 0 || (int)_unitList[i].data.SPECIES == speciese - 1) &&
                 (gold == 0 || _unitList[i].data.Gold == gold));
         }
+
+        StartListAnimation(_unitListItemRoot);
     }
 
     public override void Hide()
@@ -145,24 +147,14 @@ public class LobbyPanel : PanelBase<LobbyPanel>
     {
         GameManager.instance.StartGame();
     }   
-    private void SetTab(int tab)
+
+    public void OnRankingTabOn()
     {
-        for (int i = 0; i < _borders.Length; i++)
-            _borders[i].SetActive(i == tab);
+        StartListAnimation(_rankingItemRoot);
     }
 
-    public void OnRankingTabClick()
+    public void OnUnitTabOn()
     {
-        SetTab(0);
-    }
-
-    public void OnUnitTabClick()
-    {
-        SetTab(1);
-    }
-
-    public void OnInfoTabClick()
-    {
-        SetTab(2);
+        StartListAnimation(_unitListItemRoot);
     }
 }

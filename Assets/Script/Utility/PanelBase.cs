@@ -45,4 +45,32 @@ public abstract class PanelBase<T> : MonoPanel where T : MonoBehaviour
         if (_instance == null)
             _instance = this as T;
     }
+
+    private Coroutine _listAnimationCoroutine;
+
+    protected void StartListAnimation(Transform parent)
+    {
+        if (_listAnimationCoroutine != null)
+            StopCoroutine(_listAnimationCoroutine);
+        _listAnimationCoroutine = StartCoroutine(CorListAnimation(parent));
+    }
+
+    IEnumerator CorListAnimation(Transform parent)
+    {
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            if (!parent.GetChild(i).gameObject.activeSelf) continue;
+            parent.GetChild(i).localScale = Vector3.zero;
+        }
+
+        yield return new WaitForSeconds(0.2f);
+
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            if (!parent.GetChild(i).gameObject.activeSelf) continue;
+            LeanTween.scale(parent.GetChild(i).gameObject, Vector3.one, 0.2f).setEaseOutBack();
+            yield return new WaitForSeconds(0.08f);
+        }
+        _listAnimationCoroutine = null;
+    }
 }

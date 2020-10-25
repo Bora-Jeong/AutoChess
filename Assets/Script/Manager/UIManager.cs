@@ -16,6 +16,7 @@ public class UIManager : MonoBehaviour
             _panels[i].Init();
             _panels[i].Hide();
         }
+        GameManager.instance.SetCamera(Cam.Lobby);
         LoginPanel.instance.Show();
     }
 

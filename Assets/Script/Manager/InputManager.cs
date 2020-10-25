@@ -24,15 +24,29 @@ public class InputManager : MonoBehaviour, IPointerDownHandler
             else if (_grabedUnit.onCell.type == Cell.Type.Inventory)
                 SellGrabedUnit();
         }
-        if(Input.GetKeyDown(KeyCode.F)) // F : 경험치 구매
+        if (Input.GetKeyDown(KeyCode.F)) // F : 경험치 구매
             ShopPanel.instance.BuyExp();
     }
 
     private void SellGrabedUnit()
     {
         InventoryManager.instance.SellUnit(_grabedUnit);
-        _grabedUnit = null;
-        GamePanel.instance.ShowUnitInfo(null);
+        Select(null);
+    }
+
+    private void Select(Unit unit)
+    {
+        if(_grabedUnit != null)
+        {
+            _grabedUnit.Ouline(false);
+            _grabedUnit = null;
+        }
+        _grabedUnit = unit;
+        if(_grabedUnit != null)
+        {
+            _grabedUnit.Ouline(true);
+        }
+        GamePanel.instance.ShowUnitInfo(_grabedUnit);
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -45,36 +59,30 @@ public class InputManager : MonoBehaviour, IPointerDownHandler
                 Unit unit = hit.collider.GetComponentInParent<Unit>();
                 if(unit != null && unit == _grabedUnit)
                 {
-                    _grabedUnit.Ouline(false);
-                    _grabedUnit = null;
-                    GamePanel.instance.ShowUnitInfo(null);
+                    Select(null);
                     return;
                 }
                 if (unit != null && !unit.isCreep)
                 {
-                    if (_grabedUnit != null) _grabedUnit.Ouline(false);
-                    _grabedUnit = unit;
-                    _grabedUnit.Ouline(true);
-                    GamePanel.instance.ShowUnitInfo(_grabedUnit);
+                    Select(unit);
                     return;
                 }
             }
             if (_grabedUnit != null) // 선택한 유닛이 있다면 이동할 타일 검색
             {
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Cell")) && 
-                    GameManager.instance.gameState == GameState.Prepare)
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Cell"))) // 셀 클릭
                 {
                     Cell cell = hit.collider.GetComponent<Cell>();
                     if (cell != null && cell.type != Cell.Type.EnemyField && !cell.isOccupied) // 클릭한 유닛 이동
                     {
-                        FieldManager.instance.MoveUnitToCell(_grabedUnit, cell);
+                        if(GameManager.instance.gameState == GameState.Prepare)
+                            FieldManager.instance.MoveUnitToCell(_grabedUnit, cell);
+                        else if(_grabedUnit.onCell.type == Cell.Type.Inventory && cell.type == Cell.Type.Inventory)
+                            FieldManager.instance.MoveUnitToCell(_grabedUnit, cell);
                     }
                 }
-                if (_grabedUnit != null) _grabedUnit.Ouline(false);
-                _grabedUnit = null;
-                GamePanel.instance.ShowUnitInfo(null);
+                Select(null);
             }
         }
-
     }
 }

@@ -18,10 +18,11 @@ public class RankingItem : MonoBehaviour
 
     public void SetUp(int rank, string nickname, int win, int lose, float rate)
     {
-        _rankText.text = $"{rank}등";
+        _rankText.text = $"{rank}st";
         _nicknameText.text = nickname;
-        _winText.text = win.ToString();
-        _loseText.text = lose.ToString();
-        _rateText.text = $"{rate * 100}%";
+        _winText.text = $"{win} 승";
+        _loseText.text = $"{lose} 패";
+        string str = (rate * 100).ToString("0.0");
+        _rateText.text = $"승률 {str}%";
     }
 }

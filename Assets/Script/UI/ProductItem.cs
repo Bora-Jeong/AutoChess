@@ -22,15 +22,17 @@ public class ProductItem : MonoBehaviour
 
         _unit = unit;
         _nameText.text = _unit.Data.Name;
+        _nameText.color = _unit.Data.Gold.GoldColor();
         _classText.text = _unit.Data.CLAS.ToName();
         _speciesText.text = _unit.Data.SPECIES.ToName();
-        _goldText.text = $"Gold {_unit.Data.Gold}";
+        _goldText.text = _unit.Data.Gold.ToString();
+        _goldText.color = unit.Data.Gold.GoldColor();
         gameObject.SetActive(true);
     }
 
     public void OnClick()
     {
-        ShopPanel.instance.BuyUnit(_unit);
-        gameObject.SetActive(false);
+        if (ShopPanel.instance.BuyUnit(_unit))
+            gameObject.SetActive(false);
     }
 }

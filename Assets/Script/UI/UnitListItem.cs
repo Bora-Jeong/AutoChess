@@ -26,9 +26,11 @@ public class UnitListItem : MonoBehaviour
         {
             _data = value;
             _nameText.text = _data.Name;
+            _nameText.color = _data.Gold.GoldColor();
             _classText.text = _data.CLAS.ToName();
             _speciesText.text = _data.SPECIES.ToName();
-            _goldText.text = $"{_data.Gold}골드";
+            _goldText.text = _data.Gold.ToString();
+            _goldText.color = _data.Gold.GoldColor();
         }
     }
 

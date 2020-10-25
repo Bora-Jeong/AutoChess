@@ -40,6 +40,12 @@ public enum RoundResult
     Lose
 }
 
+public enum Cam
+{
+    Lobby,
+    Game
+}
+
 public static class Constants
 {
     // Game State 지속 시간
@@ -133,8 +139,27 @@ public static class Constants
 
     public static Color HexToColor(this string hex)
     {
-        if (ColorUtility.TryParseHtmlString(hex, out Color color))
+        if (ColorUtility.TryParseHtmlString("#"+hex, out Color color))
             return color;
        return Color.white;
+    }
+
+    public static Color GoldColor(this int gold)
+    {
+        switch (gold)
+        {
+            case 1:
+                return "B3B3B1".HexToColor();
+            case 2:
+                return "B6E4E2".HexToColor();
+            case 3:
+                return "505EE3".HexToColor();
+            case 4:
+                return "B175EF".HexToColor();
+            case 5:
+                return "F09F0F".HexToColor();
+            default:
+                return Color.white;
+        }
     }
 }

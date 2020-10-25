@@ -29,7 +29,10 @@ public class ShopPanel : PanelBase<ShopPanel>
     {
         int start = (Player.instance.level - 1) * Constants.unitMaxGold;
         for (int i = 0; i < _spawPercentTexts.Length; i++)
+        {
             _spawPercentTexts[i].text = $"{Constants.unitSpawnPercentInShop[start + i]}%";
+            _spawPercentTexts[i].color = (i+1).GoldColor();
+        }
     }
 
     private void Update()
@@ -59,11 +62,12 @@ public class ShopPanel : PanelBase<ShopPanel>
         if(pay) Player.instance.gold -= Constants.requiredGoldToShuffleShop;
     }
 
-    public void BuyUnit(Unit unit)
+    public bool BuyUnit(Unit unit)
     {
-        if (Player.instance.gold < unit.Data.Gold || InventoryManager.instance.IsFull()) return;
+        if (Player.instance.gold < unit.Data.Gold || InventoryManager.instance.IsFull()) return false;
         InventoryManager.instance.BuyUnit(unit.Data.Unitid);
         Player.instance.gold -= unit.Data.Gold;
+        return true;
     }
 
     public void BuyExp()

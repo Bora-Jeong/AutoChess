@@ -13,8 +13,7 @@ public class GamePanel : PanelBase<GamePanel>
     [SerializeField] private Text _goldText;
     [SerializeField] private Text _nicknameText;
     [SerializeField] private Text _levelText;
-    [SerializeField] private Image _expImage;
-    [SerializeField] private Slider _hpSlider;
+    [SerializeField] private Image _hpImage;
     [SerializeField] private Text _hpText;
     [SerializeField] private Text _expText;
 
@@ -48,7 +47,7 @@ public class GamePanel : PanelBase<GamePanel>
 
     private Unit _selectedUnit;
 
-   
+
     public override void Init()
     {
         GameManager.instance.OnGameStateChanged += Instance_OnGameStateChanged;
@@ -72,7 +71,7 @@ public class GamePanel : PanelBase<GamePanel>
         SynergyItem[] items = _synergyItemRoot.GetComponentsInChildren<SynergyItem>();
         for (int i = 0; i < items.Length; i++)
             Destroy(items[i].gameObject);
-        foreach(var pair in FieldManager.instance.curClassSynergy)
+        foreach (var pair in FieldManager.instance.curClassSynergy)
         {
             SynergyItem item = Instantiate(_synergyItem, _synergyItemRoot);
             item.SetUp(pair.Key, pair.Value);
@@ -95,7 +94,7 @@ public class GamePanel : PanelBase<GamePanel>
 
     private void Instance_OnHPChanged(object sender, System.EventArgs e)
     {
-        _hpSlider.value = Player.instance.hp;
+        _hpImage.fillAmount = Player.instance.hp / 100;
         _hpText.text = $"{Player.instance.hp} / 100";
     }
 
@@ -107,21 +106,15 @@ public class GamePanel : PanelBase<GamePanel>
     private void Instance_OnExpChanged(object sender, System.EventArgs e)
     {
         if (Player.instance.level < Constants.playerMaxLevel)
-        {
-            _expImage.fillAmount = Player.instance.exp / (float)Constants.requiredExpToLevelUp[Player.instance.level];
             _expText.text = $"{Player.instance.exp}/{Constants.requiredExpToLevelUp[Player.instance.level]}";
-        }
     }
 
     private void Instance_OnLevelChanged(object sender, System.EventArgs e)
     {
-        _levelText.text = Player.instance.level.ToString();
+        _levelText.text = $"Lv.{Player.instance.level}";
         _chessCountText.text = $"{FieldManager.instance.GetCountOfChessOnMyField()}/{Player.instance.level}";
-        if(Player.instance.level == Constants.playerMaxLevel)
-        {
-            _expImage.fillAmount = 0;
+        if (Player.instance.level == Constants.playerMaxLevel)
             _expText.text = string.Empty;
-        }
     }
 
     public void OnBuyExpButton()
@@ -131,7 +124,7 @@ public class GamePanel : PanelBase<GamePanel>
 
     public void ShowUnitInfo(Unit unit)
     {
-        if(unit == null)
+        if (unit == null)
         {
             _selectedUnit = null;
             _selectedUnitInfo.SetActive(false);
@@ -141,6 +134,7 @@ public class GamePanel : PanelBase<GamePanel>
         _selectedUnit = unit;
         _selectedUnitInfo.SetActive(true);
         _unitNameText.text = _selectedUnit.Data.Name;
+        _unitNameText.color = _selectedUnit.Data.Gold.GoldColor();
         _unitClassText.text = _selectedUnit.Data.CLAS.ToName();
         _unitSpeciesText.text = _selectedUnit.Data.SPECIES.ToName();
         _unitStarText.text = $"{_selectedUnit.star}성";
@@ -161,7 +155,7 @@ public class GamePanel : PanelBase<GamePanel>
     {
         bool state = GameManager.instance.gameState == GameState.Battle || GameManager.instance.gameState == GameState.Result;
         text.gameObject.SetActive(state && num != 0);
-        if(state && num != 0)
+        if (state && num != 0)
             text.text = num > 0 ? $"+{num}" : num.ToString("0.0");
     }
 

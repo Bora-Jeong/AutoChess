@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class PopUpPanel : PanelBase<PopUpPanel>
 {
     [SerializeField]
+    private GameObject _border;
+    [SerializeField]
     private Text _contentText;
     [SerializeField]
     private Button _leftButton;
@@ -15,6 +17,13 @@ public class PopUpPanel : PanelBase<PopUpPanel>
     private Button _rightButton;
     [SerializeField]
     private Text _rightButtonText;
+
+    public override void Show()
+    {
+        base.Show();
+        _border.transform.localScale = Vector3.zero;
+        LeanTween.scale(_border, Vector3.one, 0.3f).setEaseInBack();
+    }
 
     public void PopUpNotice(string content)
     {
