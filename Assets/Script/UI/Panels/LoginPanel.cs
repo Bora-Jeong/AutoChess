@@ -18,11 +18,13 @@ public class LoginPanel : PanelBase<LoginPanel>
 
     public void OnLoginButtonClick()
     {
+        UIManager.instance.PlayButtonClickSfx();
         PacketManager.instance.SendPacket_Login(_nickname.text, _password.text);
     }
 
     public void OnAuthButtonClick()
     {
+        UIManager.instance.PlayButtonClickSfx();
         PacketManager.instance.SendPacket_Authentication(_nickname.text, _password.text);
     }
 

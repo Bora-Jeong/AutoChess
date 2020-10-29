@@ -25,7 +25,7 @@ public class UnitCanvas : MonoBehaviour
     private void Instance_OnGameStateChanged(object sender, System.EventArgs e)
     { 
         gameObject.SetActive((GameManager.instance.gameState == GameState.Battle || GameManager.instance.gameState == GameState.Result) 
-            &&  _owner.onCell != null && _owner.onCell.type == Cell.Type.MyField);
+            &&  _owner.onCell != null && _owner.onCell.type != Cell.Type.Inventory);
     }
 
     private void Update()

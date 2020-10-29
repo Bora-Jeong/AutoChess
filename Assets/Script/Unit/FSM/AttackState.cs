@@ -26,6 +26,8 @@ public class AttackState : MonoBehaviour, IState
             _owner.state = Unit.State.Idle;
             return;
         }
+
+        _owner.transform.LookAt(_owner.target.transform);
     }
 
     private IEnumerator AttackCoroutine()
@@ -47,7 +49,7 @@ public class AttackState : MonoBehaviour, IState
             }
                   
             _owner.target.TakeDamage( _owner.Data.DAMAGETYPE, damage, critical);
-            _owner.curMp = Mathf.Clamp(_owner.curMp + damage, 0, _owner.curFullMp);
+            _owner.curMp = Mathf.Clamp(_owner.curMp + damage/20, 0, _owner.curFullMp);
 
             if(_owner.synergyMakeSilent > 0 && Random.Range(0, 100) < _owner.synergyMakeSilent)   // 침묵시킴
             {

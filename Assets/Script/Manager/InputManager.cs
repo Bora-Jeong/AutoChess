@@ -26,6 +26,13 @@ public class InputManager : MonoBehaviour, IPointerDownHandler
         }
         if (Input.GetKeyDown(KeyCode.F)) // F : 경험치 구매
             ShopPanel.instance.BuyExp();
+        if (Input.GetKeyDown(KeyCode.Escape)) // 로비로 나가기
+        {
+            PopUpPanel.instance.PopUpYesOrNo("로비로 나가시겠습니까?", () =>
+            {
+                GameManager.instance.ExitGame();
+            }, null);
+        }
     }
 
     private void SellGrabedUnit()
@@ -62,7 +69,7 @@ public class InputManager : MonoBehaviour, IPointerDownHandler
                     Select(null);
                     return;
                 }
-                if (unit != null && !unit.isCreep)
+                if (unit != null)
                 {
                     Select(unit);
                     return;
@@ -73,7 +80,7 @@ public class InputManager : MonoBehaviour, IPointerDownHandler
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Cell"))) // 셀 클릭
                 {
                     Cell cell = hit.collider.GetComponent<Cell>();
-                    if (cell != null && cell.type != Cell.Type.EnemyField && !cell.isOccupied) // 클릭한 유닛 이동
+                    if (!_grabedUnit.isCreep && cell != null && cell.type != Cell.Type.EnemyField && !cell.isOccupied) // 클릭한 유닛 이동
                     {
                         if(GameManager.instance.gameState == GameState.Prepare)
                             FieldManager.instance.MoveUnitToCell(_grabedUnit, cell);

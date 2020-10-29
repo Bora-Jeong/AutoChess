@@ -85,10 +85,11 @@ public class GamePanel : PanelBase<GamePanel>
 
     private void Instance_OnGameStateChanged(object sender, System.EventArgs e)
     {
-        _gameStateText.text = GameManager.instance.gameState.ToString().ToUpper();
+        GameState state = GameManager.instance.gameState;
+        _gameStateText.text = state == GameState.Result ? FieldManager.instance.GetRoundResult(out int dagamge).ToString().ToUpper()
+           : GameManager.instance.gameState.ToString().ToUpper();
         _roundText.text = $"Round { GameManager.instance.round}";
-
-        if (GameManager.instance.gameState == GameState.Battle || GameManager.instance.gameState == GameState.Prepare)
+        if (state == GameState.Battle || state == GameState.Prepare)
             ShowUnitInfo(_selectedUnit);
     }
 
@@ -167,7 +168,7 @@ public class GamePanel : PanelBase<GamePanel>
             _unitMpSlider.value = _selectedUnit.curMp / _selectedUnit.curFullMp;
             _unitHpText.text = $"{(int)_selectedUnit.curHp} / {_selectedUnit.curFullHp}";
             _unitMpText.text = $"{(int)_selectedUnit.curMp} / {_selectedUnit.curFullMp}";
-            _unitSkillCoolTimeImage.fillAmount = _selectedUnit.curSkillCoolTime / _selectedUnit.Data.Skillcooltime;
+            _unitSkillCoolTimeImage.fillAmount =  _selectedUnit.curSkillCoolTime / _selectedUnit.Data.Skillcooltime;
             _unitSkillCoolTimeText.gameObject.SetActive(_selectedUnit.curSkillCoolTime > 0);
             _unitSkillCoolTimeText.text = _selectedUnit.curSkillCoolTime.ToString("0.0");
         }

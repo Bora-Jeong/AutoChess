@@ -32,6 +32,17 @@ public class LobbyPanel : PanelBase<LobbyPanel>
     private List<UnitListItem> _unitList;
     private Unit _selectedUnit;
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            PopUpPanel.instance.PopUpYesOrNo("게임을 종료하시겠습니까?", () =>
+            {
+                Application.Quit();
+            }, null);
+        }
+    }
+
     public override void Init()
     {
         InitUnitTab();
@@ -99,6 +110,7 @@ public class LobbyPanel : PanelBase<LobbyPanel>
         if(_selectedUnit != null)
             ObjectPoolManager.instance.Release(_selectedUnit);
 
+        UIManager.instance.PlayButtonClickSfx();
         _selectedUnitInfo.SetActive(true);
         _selectedUnit = ObjectPoolManager.instance.GetUnit(unitID);
         _selectedUnit.transform.SetParent(_renderPosition);
@@ -116,6 +128,7 @@ public class LobbyPanel : PanelBase<LobbyPanel>
 
     public void OnDropDownChanged()
     {
+        UIManager.instance.PlayButtonClickSfx();
         _selectedUnitInfo.SetActive(false);
         if (UnitListItem.SelectedItem != null)
             UnitListItem.SelectedItem.DeSelect();
@@ -145,6 +158,7 @@ public class LobbyPanel : PanelBase<LobbyPanel>
 
     public void OnStartButtonClick()
     {
+        UIManager.instance.PlayButtonClickSfx();
         GameManager.instance.StartGame();
     }   
 

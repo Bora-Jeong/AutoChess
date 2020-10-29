@@ -5,6 +5,8 @@ using UnityEngine;
 public class IdleState : IState
 {
     private Unit _owner;
+    private int _findTargetTryCount;
+
     public IdleState(Unit unit)
     {
         _owner = unit;
@@ -12,6 +14,7 @@ public class IdleState : IState
     public void Enter()
     {
         _owner.PlayAnimation(Unit.State.Idle);
+        _findTargetTryCount = 0;
     }
 
     public void Stay()
@@ -26,6 +29,7 @@ public class IdleState : IState
 
     public void FindTarget()
     {
+        _findTargetTryCount++;
         Collider[] colliders = Physics.OverlapSphere(_owner.transform.position, _owner.findTargetRange, 1 << LayerMask.NameToLayer("Unit"));
         if (colliders.Length <= 0) return; // 범위안에 아무도 없음
         Unit nearestTarget = null; // 가장 가까운 적을 저장하기 위한 변수
@@ -43,10 +47,13 @@ public class IdleState : IState
                 }
             }
         }
-        if(nearestTarget != null)
+        if (nearestTarget != null)
         {
             _owner.target = nearestTarget;  // 가장 가까운 적으로 타겟 설정
             _owner.state = Unit.State.Move; // 타겟을 향해 이동
+            _findTargetTryCount = 0;
         }
+        else if(_findTargetTryCount > Time.deltaTime * 2) // 한동안 적을 못찾으면 라운드가 끝났는지 확인
+            FieldManager.instance.ReportRoundFinish();
     }
 }

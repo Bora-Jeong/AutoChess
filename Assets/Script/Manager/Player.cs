@@ -30,6 +30,7 @@ public class Player : Singleton<Player>
             }
             OnExpChanged?.Invoke(this, EventArgs.Empty);
         }
+
     }
 
     private int _gold;
@@ -49,7 +50,7 @@ public class Player : Singleton<Player>
         get => _hp;
         set
         {
-            _hp = value;
+            _hp = Math.Max(value, 0);
             OnHPChanged?.Invoke(this, EventArgs.Empty);
         }
     }

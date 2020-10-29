@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIManager : MonoBehaviour
+public class UIManager : Singleton<UIManager>
 {
     [SerializeField]
     private GameObject _devCheat;
@@ -24,5 +24,15 @@ public class UIManager : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(2))
             _devCheat.SetActive(!_devCheat.activeSelf);
+    }
+
+    public void PlayButtonClickSfx() 
+    {
+        SoundManager.PlaySFX("button_click");
+    }
+
+    public void PlayButtonHoverSfx()
+    {
+        SoundManager.PlaySFX("button_hover");
     }
 }

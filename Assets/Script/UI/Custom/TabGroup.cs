@@ -23,6 +23,7 @@ public class TabGroup : MonoBehaviour
 
     public void OnTabEnter(TabButton button)
     {
+        UIManager.instance.PlayButtonHoverSfx();
         ResetTabs();
         if(selectedTab == null || button != selectedTab)
         {
@@ -40,6 +41,7 @@ public class TabGroup : MonoBehaviour
 
     public void OnTabSelected(TabButton button)
     {
+        UIManager.instance.PlayButtonClickSfx();
         if(selectedTab != null)
         {
             selectedTab.DeSelect();

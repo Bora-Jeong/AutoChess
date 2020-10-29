@@ -16,7 +16,7 @@ public class ShopPanel : PanelBase<ShopPanel>
     private Text[] _spawPercentTexts;
 
     private Dictionary<int, List<int>> _unitGoldPoolDic; // 키 : 플레이어 레벨
-    private Dictionary<int, List<int>> _unitIDDic; // 골드별 유닛 아이디
+    public Dictionary<int, List<int>> unitIDDic; // 골드별 유닛 아이디
 
     public override void Init()
     {
@@ -50,7 +50,7 @@ public class ShopPanel : PanelBase<ShopPanel>
         for(int i = 0; i < _renderPositions.Length; i++)
         {
             int unitGold = randomPool[Random.Range(0, randomPool.Count)]; // 확률에 따른 유닛 골드 뽑기
-            List<int> unitIDPool = _unitIDDic[unitGold];  // 해당 골드의 유닛 풀
+            List<int> unitIDPool = unitIDDic[unitGold];  // 해당 골드의 유닛 풀
             int unitID = unitIDPool[Random.Range(0, unitIDPool.Count)]; // 유닛 랜덤 뽑기
             Unit unit = ObjectPoolManager.instance.GetUnit(unitID);
             unit.transform.SetParent(_renderPositions[i]);
@@ -60,6 +60,15 @@ public class ShopPanel : PanelBase<ShopPanel>
         }
 
         if(pay) Player.instance.gold -= Constants.requiredGoldToShuffleShop;
+    }
+
+    public int GetRandomUnitID()
+    {
+        int level = Player.instance.level;
+        List<int> randomPool = _unitGoldPoolDic[level - 1];  // 플레이어 레벨의 유닛 확률 셋
+        int unitGold = randomPool[Random.Range(0, randomPool.Count)]; // 확률에 따른 유닛 골드 뽑기
+        List<int> unitIDPool = unitIDDic[unitGold];  // 해당 골드의 유닛 풀
+        return unitIDPool[Random.Range(0, unitIDPool.Count)]; // 유닛 랜덤 뽑기
     }
 
     public bool BuyUnit(Unit unit)
@@ -95,13 +104,13 @@ public class ShopPanel : PanelBase<ShopPanel>
             _unitGoldPoolDic.Add(i, temp);
         }
 
-        _unitIDDic = new Dictionary<int, List<int>>();
+        unitIDDic = new Dictionary<int, List<int>>();
         for (int i = 0; i < Constants.unitMaxGold; i++)
-            _unitIDDic.Add(i, new List<int>());
+            unitIDDic.Add(i, new List<int>());
 
         var unitDic = TableData.instance.unitTableDic;
         foreach(var par in unitDic)
-            _unitIDDic[par.Value.Gold - 1].Add(par.Key);
+            unitIDDic[par.Value.Gold - 1].Add(par.Key);
     }
 
     public void OnShuffleButton()

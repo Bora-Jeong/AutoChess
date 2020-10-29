@@ -17,12 +17,13 @@ public class Cell : MonoBehaviour
     public Type type => _type;
     public bool isOccupied => _unit != null;
 
-    public Unit _unit; // debulg용 public
+    private Unit _unit; // debulg용 public
 
     public void SetUnit(Unit unit)
     {
         _unit = unit;
-        _unit.onCell.DeSetUnit(); // 이전에 있던 Cell에 알림
+        if(_unit.onCell != null)
+            _unit.onCell.DeSetUnit(); // 이전에 있던 Cell에 알림
         _unit.onCell = this;
     }
 

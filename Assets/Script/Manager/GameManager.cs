@@ -57,7 +57,6 @@ public class GameManager : Singleton<GameManager>
 
             case GameState.Wait:
                 _timer = Constants.waitTimeSpan;
-                // 몹 소환
                 break;
 
             case GameState.Battle:
@@ -77,6 +76,7 @@ public class GameManager : Singleton<GameManager>
     {
         InventoryManager.instance.Clear();
         FieldManager.instance.Clear();
+        Player.instance.hp = 100;
         Player.instance.level = 1;
         Player.instance.exp = 0;
         Player.instance.gold = 1;
@@ -88,9 +88,19 @@ public class GameManager : Singleton<GameManager>
         StartCoroutine(GameScheduler());
     }
 
+    public void ExitGame() // 중간에 게임 종료
+    {
+        StopAllCoroutines();
+        SetCamera(Cam.Lobby);
+        isPlaying = false;
+        ShopPanel.instance.Hide();
+        GamePanel.instance.Hide();
+        LobbyPanel.instance.Show();
+    }
+
     private void ApplyRoundResult()
     {
-        if (_result == RoundResult.Win) // 연승 기록
+        if (_result == RoundResult.Win) // 연승 기록 
         {
             _succWin++;
             _succLose = 0;
@@ -114,7 +124,7 @@ public class GameManager : Singleton<GameManager>
         if (_succLose >= 9) sucLoseGold = 3;
         else if (_succLose >= 6) sucLoseGold = 2;
         else if (_succLose >= 3) sucLoseGold = 1;
-        int interest = Player.instance.gold % 10; // 이자 10퍼센트
+        int interest = Mathf.Min(Player.instance.gold / 10, 5); // 이자 10퍼센트 최대 5원
 
         Player.instance.gold += roundGold + winGold + sucWinGold + sucLoseGold + interest;
         Debug.Log($"기본 골드 {roundGold} 승리 보너스 {winGold} 연승 보너스 {sucWinGold} 연패 보너스 {sucLoseGold} 이자 {interest}");

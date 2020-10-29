@@ -21,8 +21,8 @@ public class DevCheat : Singleton<DevCheat>
     public void OnSpawnEnemy()
     {
         Unit unit = ObjectPoolManager.instance.GetUnit(int.Parse(_unitInputField.text));
-        unit.onCell = FieldManager.instance.GetEmptyEnemyCell();
-        unit.onCell._unit = unit;
+        Cell cell = FieldManager.instance.GetEmptyEnemyCell();
+        cell.SetUnit(unit);
         unit.isCreep = true;
         unit.transform.position = unit.onCell.transform.position;
         unit.transform.rotation = Quaternion.Euler(0, 180, 0);

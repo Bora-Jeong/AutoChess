@@ -18,27 +18,43 @@ public class FieldManager : Singleton<FieldManager>
 
     private Dictionary<int, List<Unit>> _myUnitsOnField = new Dictionary<int, List<Unit>>(); // key : unitID
     private List<Unit> _enemyUnitsOnField = new List<Unit>();
-    
-    private Dictionary<Clas, int> _curClassSynergy = new Dictionary<Clas, int>();
-    private Dictionary<Species, int> _curSpeciesSynergy = new Dictionary<Species, int>();
-    public Dictionary<Clas, int> curClassSynergy => _curClassSynergy;
-    public Dictionary<Species, int> curSpeciesSynergy => _curSpeciesSynergy;
+    private Cell[] _fieldCells = new Cell[(int)Math.Pow(Constants.fieldRow, 2)];
+
+    public Dictionary<Clas, int> curClassSynergy = new Dictionary<Clas, int>();
+    public Dictionary<Species, int> curSpeciesSynergy = new Dictionary<Species, int>();
 
     private void Awake()
     {
         GameManager.instance.OnGameStateChanged += Instance_OnGameStateChanged;
+        for (int i = 0; i < _myCells.Length; i++)
+            _fieldCells[i] = _myCells[i];
+        for (int i = 0; i < _enemyCells.Length; i++)
+            _fieldCells[_myCells.Length + i] = _enemyCells[i];
     }
 
     private void Instance_OnGameStateChanged(object sender, EventArgs e)
     {
         if (GameManager.instance.gameState == GameState.Wait)
         {
-            CheckUnitCountAndSell();
+            SetUnitCountUnderLimit();
+            SpawnEnemys();
             ApplyAllSynergyEffect();
+        }
+        else if (GameManager.instance.gameState == GameState.Prepare)
+        {
+            ClearEnemyField();
         }
     }
 
-    private void CheckUnitCountAndSell()
+    public void ReportRoundFinish()
+    {
+        if(GetRoundResult(out int damage) != RoundResult.Draw) // 시간이 끝나기 전에 한쪽이 전멸하면 라운드 종료
+        {
+            GameManager.instance.gameState++;
+        }
+    }
+
+    private void SetUnitCountUnderLimit()
     {
         int count = 0;
         foreach(var pair in _myUnitsOnField)
@@ -56,6 +72,60 @@ public class FieldManager : Singleton<FieldManager>
                 count--;
                 if (count <= 0) return;
             }
+        }
+    }
+
+    private void SpawnEnemys()
+    {
+        List<Unit> playerUnit = new List<Unit>();
+        foreach (var pair in _myUnitsOnField)
+            for (int i = 0; i < pair.Value.Count; i++)
+                playerUnit.Add(pair.Value[i]);
+
+        Dictionary<int, List<int>> unitIDDic = ShopPanel.instance.unitIDDic;
+
+        while(_enemyUnitsOnField.Count < Player.instance.level)
+        {
+            Unit unit = null;
+            if (playerUnit.Count > 0)
+            {
+                Unit temp = playerUnit[UnityEngine.Random.Range(0, playerUnit.Count)]; // 플레이어 유닛 중 하나 랜덤으로 뽑음
+                playerUnit.Remove(temp);
+                int randomInt = UnityEngine.Random.Range(0, 10); // 랜덤으로 플레이어 골드 +- 1
+                if (randomInt < 2) randomInt = -1;
+                else if (randomInt < 4) randomInt = 1;
+                else randomInt = 0;
+                int unitGold = Mathf.Clamp(temp.Data.Gold + randomInt, 1, Constants.unitMaxGold) - 1; // 유닛 골드
+                int unitID = unitIDDic[unitGold][UnityEngine.Random.Range(0, unitIDDic[unitGold].Count)];
+                unit = ObjectPoolManager.instance.GetUnit(unitID);
+                unit.star = temp.star;
+            }
+            else
+            {
+                int unitID = ShopPanel.instance.GetRandomUnitID();
+                unit = ObjectPoolManager.instance.GetUnit(unitID);
+                int randomInt = UnityEngine.Random.Range(0, 10); // 1성 50퍼 2성 40퍼 3성 10퍼
+                if (randomInt < 1) randomInt = 3;  
+                else if (randomInt < 5) randomInt = 2;
+                else randomInt = 1;
+                unit.star = randomInt;
+            }
+            GetEmptyEnemyCell().SetUnit(unit);
+            unit.transform.position = unit.onCell.transform.position;
+            unit.transform.localEulerAngles = new Vector3(0, 180, 0);
+            unit.isCreep = true;
+            _enemyUnitsOnField.Add(unit);
+         }
+    }
+
+    public void ClearEnemyField()
+    {
+        while(_enemyUnitsOnField.Count > 0)
+        {
+            Unit unit = _enemyUnitsOnField[0];
+            unit.onCell.DeSetUnit();
+            ObjectPoolManager.instance.Release(unit);
+            _enemyUnitsOnField.RemoveAt(0);
         }
     }
 
@@ -93,26 +163,51 @@ public class FieldManager : Singleton<FieldManager>
         OnFieldChanged?.Invoke(this, EventArgs.Empty);
     }
 
+    public Cell GetNearestEmptyCell(Vector3 pos)
+    {
+        int radius = 0;
+        while (radius < 30)
+        {
+            radius += 5;
+            Collider[] colliders = Physics.OverlapSphere(pos, radius, 1 << LayerMask.NameToLayer("Cell"));
+            float minDist = float.PositiveInfinity;
+            int minIndex = -1;
+            for(int i = 0; i < colliders.Length; i++)
+            {
+                Cell cell = colliders[i].GetComponent<Cell>();
+                if (cell == null) continue;
+                if(Vector3.Distance(pos, cell.transform.position) < minDist)
+                {
+                    minDist = Vector3.Distance(pos, cell.transform.position);
+                    minIndex = i;
+                }
+            }
+            if (minIndex != -1)
+                return colliders[minIndex].GetComponent<Cell>();
+        }
+        return null;
+    }
+
     private void UpdateSynergy() // 시너지 업데이트
     {
-        _curClassSynergy.Clear();
-        _curSpeciesSynergy.Clear();
+        curClassSynergy.Clear();
+        curSpeciesSynergy.Clear();
         foreach (var pair in _myUnitsOnField)
         {
             if (pair.Value.Count <= 0) continue;
             var data = TableData.instance.GetUnitTableData(pair.Key);
-            if (_curClassSynergy.ContainsKey(data.CLAS)) _curClassSynergy[data.CLAS]++;
-            else _curClassSynergy.Add(data.CLAS, 1);
-            if (_curSpeciesSynergy.ContainsKey(data.SPECIES)) _curSpeciesSynergy[data.SPECIES]++;
-            else _curSpeciesSynergy.Add(data.SPECIES, 1);
+            if (curClassSynergy.ContainsKey(data.CLAS)) curClassSynergy[data.CLAS]++;
+            else curClassSynergy.Add(data.CLAS, 1);
+            if (curSpeciesSynergy.ContainsKey(data.SPECIES)) curSpeciesSynergy[data.SPECIES]++;
+            else curSpeciesSynergy.Add(data.SPECIES, 1);
         }
     }
 
     private void ApplyAllSynergyEffect()
     {
-        foreach (var pair in _curClassSynergy)
+        foreach (var pair in curClassSynergy)
             ApplySynergyEffect(pair.Key, pair.Value);
-        foreach (var pair in _curSpeciesSynergy)
+        foreach (var pair in curSpeciesSynergy)
             ApplySynergyEffect(pair.Key, pair.Value);
     }
 
@@ -221,6 +316,14 @@ public class FieldManager : Singleton<FieldManager>
                 break;
 
             case Species.Mage: // 모든 적군 유닛의 마법 저항력을 {0}% 감소합니다.
+                for(int i = 0; i < _enemyUnitsOnField.Count; i++)
+                {
+                    for(int j = 0; j < data.Typecount.Length; j++)
+                    {
+                        if (typeCount < data.Typecount[j]) break;
+                        _enemyUnitsOnField[i].synergyMagicResistPower -= data.Values[j] / 100;
+                    }
+                }
                 break;
 
             case Species.Hunter: // 아군 사냥꾼 유닛의 공격력이 {0}% 증가합니다.
@@ -292,23 +395,11 @@ public class FieldManager : Singleton<FieldManager>
         return null;
     }
 
-    public void ClearEnemyField() // fop test
-    {
-        for (int i = 0; i < _enemyCells.Length; i++)
-        {
-            if (_enemyCells[i].isOccupied)
-            {
-                ObjectPoolManager.instance.Release(_enemyCells[i]._unit);
-                _enemyCells[i]._unit = null;
-            }
-        }
-    }
-
     public void Clear()
     {
         _myUnitsOnField.Clear();
-        _curClassSynergy.Clear();
-        _curSpeciesSynergy.Clear();
+        curClassSynergy.Clear();
+        curSpeciesSynergy.Clear();
     }
 
     public Sprite GetClassIcon(Clas clas) => _classIcon[(int)clas];

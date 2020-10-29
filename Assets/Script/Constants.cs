@@ -48,10 +48,12 @@ public enum Cam
 
 public static class Constants
 {
+    public static readonly int fieldRow = 8;
+
     // Game State 지속 시간
-    public static readonly float prepareTimeSpan = 10f; // debug용 원래 30초
+    public static readonly float prepareTimeSpan = 20f;
     public static readonly float waitTimeSpan = 3f;
-    public static readonly float battleTimeSpan = 10f;  // debug용 원래 30초
+    public static readonly float battleTimeSpan = 20f;  // debug용 원래 30초
     public static readonly float resultTimeSpan = 3f;
 
     public static readonly int playerMaxLevel = 10; // 플레이어 최대 레벨
