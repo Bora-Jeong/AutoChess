@@ -772,6 +772,7 @@ MonoBehaviour:
   _walkAnimName: Run
   _stunAnimName: Stun
   _deadAnimName: Die
+  _weapon: 0
   findTargetRange: 0
   curHp: 0
   curMp: 0
@@ -795,7 +796,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1417114037667856}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 1.04
   m_Height: 3.0904675

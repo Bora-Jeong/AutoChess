@@ -12,6 +12,7 @@ public class DeadState : IState
     public void Enter()
     {
         _owner.PlayAnimation(Unit.State.Dead);
+        _owner.GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
     public void Stay()
     {

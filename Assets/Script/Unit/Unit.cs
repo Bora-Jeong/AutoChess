@@ -164,6 +164,7 @@ public class Unit : MonoBehaviour
         {
             if(onCell != null && onCell.type != Cell.Type.Inventory)
             {
+                _rigidbody.velocity = Vector3.zero;
                 transform.position = _prevPos;
                 transform.rotation = _prevRot;
                 ResetState();
@@ -178,7 +179,7 @@ public class Unit : MonoBehaviour
                 curHp = fullHpOnBattle;
                 if (dragonSynergy && Data.CLAS == Clas.Dragon)
                     curMp = curFullMp;
-                if (knightSynergy > 0 && Data.SPECIES == Species.Knight)
+                if (knightSynergy > 0 && Data.SPECIES == Species.Knight && onCell != null && onCell.type == Cell.Type.MyField)
                     _kinghtSynergyTimer = Constants.kinghtShieldGenTime;
             }
         }
@@ -217,7 +218,6 @@ public class Unit : MonoBehaviour
         onCell = null;
         target = null;
         isCreep = false;
-        _rigidbody.velocity = Vector3.zero;
     }
 
     private void Update()
@@ -258,7 +258,7 @@ public class Unit : MonoBehaviour
     public void TakeDamage(DamageType damageType, float damage, bool isCritical)
     {
         if (_isInvincibility) return; // 무적
-        if(synergyEvasion > 0 && Random.Range(0, 100) < synergyEvasion) // 회피
+        if(onCell.type == Cell.Type.MyField && synergyEvasion > 0 && Random.Range(0, 100) < synergyEvasion) // 회피
         {
             PopUpText.Create(this, "evasion");
             return;

@@ -62,7 +62,7 @@ public static class Constants
     public static readonly float battleTimeSpan = 20f;  // debug용 원래 30초
     public static readonly float resultTimeSpan = 3f;
 
-    public static readonly int maxRound = 1; // debug용 원래 10라운드
+    public static readonly int maxRound = 5; // debug용 원래 10라운드
 
     public static readonly int playerMaxLevel = 10; // 플레이어 최대 레벨
     public static readonly int unitMaxGold = 5; // 유닛 최대 골드

@@ -29,6 +29,11 @@ public class LobbyPanel : PanelBase<LobbyPanel>
     [SerializeField] private Text _skillCoolTimeText;
     [SerializeField] private SkillIcon _skillIcon;
 
+    [Header("Setting Tab")]
+    [SerializeField] private Image _bgmToggle;
+    [SerializeField] private Image _sfxToggle;
+    [SerializeField] private Sprite[] _onOffSprites;
+
     private List<UnitListItem> _unitList;
     private Unit _selectedUnit;
 
@@ -170,5 +175,21 @@ public class LobbyPanel : PanelBase<LobbyPanel>
     public void OnUnitTabOn()
     {
         StartListAnimation(_unitListItemRoot);
+    }
+
+    public void OnBGMToggleChanged(bool isOn)
+    {
+        UIManager.instance.PlayButtonClickSfx();
+        int on = isOn ? 1 : 0;
+        SoundManager.SetVolumeMusic(on);
+        _bgmToggle.sprite = _onOffSprites[on];
+    }
+
+    public void OnSFXToggleChanged(bool isOn)
+    {
+        UIManager.instance.PlayButtonClickSfx();
+        int on = isOn ? 1 : 0;
+        SoundManager.SetVolumeSFX(on);
+        _sfxToggle.sprite = _onOffSprites[on];
     }
 }

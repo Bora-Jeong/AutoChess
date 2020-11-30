@@ -100,7 +100,7 @@ public class GameManager : Singleton<GameManager>
         Player.instance.hp = 100;
         Player.instance.level = 1;
         Player.instance.exp = 0;
-        Player.instance.gold = 1;
+        Player.instance.gold = 50;
         round = 0;
         _succWin = _succLose = 0;
         _totalWin = _totalLose = 0;
